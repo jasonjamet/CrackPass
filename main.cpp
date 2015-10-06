@@ -5,6 +5,6 @@
 #include "main.h"
 
 int main() {
-    int i = 19;
+    int i = 10;
     return 0;
 }
