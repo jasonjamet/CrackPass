@@ -4,7 +4,8 @@
 
 #include "main.h"
 
+
 int main() {
-    int i = 30;
+
     return 0;
 }
