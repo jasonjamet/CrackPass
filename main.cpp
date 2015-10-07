@@ -34,12 +34,7 @@ char * findEncryptedPassword(ifstream* shadowFileStream) {
 
 
 int main() {
-
-    Functions *F = new Functions(mdp);
-    F->bruteForce(4);
-    delete (F);
-
-    /*string shadowFileName = "/home/etudiant/Projects/CrackPass/shadow";
+    string shadowFileName = "/home/jason/Dropbox/git/CrackPass/shadow";
     ifstream shadowFileStream;
     shadowFileStream.open(shadowFileName);
     if (shadowFileStream.is_open()) {
@@ -51,12 +46,11 @@ int main() {
             //const char *passwordCandidate = "patrick";
             //F->encryptAndCompare(passwordEncrypted, passwordCandidate);
             delete (F);
-
         } else {
             cerr << "Error user not found" << endl;
         }
     } else {
         cerr << "Error during file opening" << endl;
-    }*/
+    }
     return 0;
 }

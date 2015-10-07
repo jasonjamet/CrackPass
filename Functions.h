@@ -35,4 +35,3 @@ public:
 
 
 #endif //CRACKPASS_FUNCTIONS_H
-
