@@ -1,9 +1,12 @@
-#include "Functions.h"
+//
+// Created by etudiant on 06/10/15.
+//
+
 #include "main.h"
+#include "Functions.h"
 
 
 char *mdp = "aaaa";
-
 
 
 
@@ -46,6 +49,7 @@ int main() {
         char * passwordEncrypted = findEncryptedPassword(&shadowFileStream);
         if(passwordEncrypted != NULL) {
             shadowFileStream.close();
+            int i;
             const char *passwordCandidate = "patrick";
             F->encryptAndCompare(passwordEncrypted, passwordCandidate);
         } else {
