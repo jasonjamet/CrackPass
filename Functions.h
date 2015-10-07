@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string.h>
 #include <crypt.h>
+#include <unistd.h>
 #include <sstream>
 
 using namespace std;
@@ -23,11 +24,11 @@ private:
     const char *m_hash;
     const char *password;
 
-    bool checkForce(char *str, int index, int max);
-    bool encryptAndCompare(char *passwordEncrypted, const char * passwordCandidate);
+    void checkForce(char *str, int index, int max);
 
 public:
     Functions(const char *hash);
+    bool encryptAndCompare(const char *passwordEncrypted, const char * passwordCandidate);
 
     void bruteForce(int max = 4);
 };
