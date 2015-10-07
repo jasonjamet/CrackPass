@@ -33,7 +33,7 @@ void Functions::checkForce(char *str, int index, int max) {
             str[index] = characters[i];
             if (index == max - 1) {
                 if (encryptAndCompare(m_hash, str)) {
-                    strcpy(password, str);
+                    strcpy(password, (const char *)str);
                     break;
                 }
             } else {
