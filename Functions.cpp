@@ -6,7 +6,7 @@
 #include <crypt.h>
 #include "Functions.h"
 
-Functions::Functions(string salt, const char *hash) : m_salt(salt), m_hash(hash) {
+Functions::Functions(string salt, const char *hash): m_hash(hash) {
 
 }
 
@@ -34,7 +34,7 @@ bool Functions::checkForce(char *str, int index, int max) {
         str[index] = characters[i];
 
         if (index == max - 1) {
-            if (strcmp(str, m_hash) == 0) {
+            if (encryptAndCompare(str, m_hash)) {
                 password = str;
                 return true;
             }
@@ -51,9 +51,5 @@ bool Functions::encryptAndCompare(char *passwordEncrypted, const char * password
 
     char * passwordCandidateEncrypted = crypt(passwordCandidate, passwordEncrypted);
 
-    if(strcmp(passwordEncrypted, passwordCandidateEncrypted) == 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return strcmp(passwordEncrypted, passwordCandidateEncrypted) == 0;
 }

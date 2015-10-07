@@ -21,16 +21,15 @@ static const int characters_size = sizeof(characters) - 1;
 class Functions {
 
 private:
-    string m_salt;
     const char *m_hash;
     const char *password;
 
     bool checkForce(char *str, int index, int max);
+    bool encryptAndCompare(char *passwordEncrypted, const char * passwordCandidate);
 
 public:
     Functions(string salt, const char *hash);
 
-    bool encryptAndCompare(char *passwordEncrypted, const char * passwordCandidate);
     void bruteForce(int max = 4);
 };
 
