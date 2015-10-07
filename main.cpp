@@ -1,37 +1,11 @@
-//
-// Created by etudiant on 06/10/15.
-//
-
 #include "Functions.h"
-
-/* Comments and TODDO
- *
- *
- *
- *
- */
 #include "main.h"
 
 
 char *mdp = "aaaa";
 
 
-/*
- * Encrypt the candidate password, and compare it to the real encrypted password
- * Arguments passwordEncrypted, passwordCandidate
- * Return bool
- */
-bool encryptAndCompare(char *passwordEncrypted, const char * passwordCandidate) {
 
-    char * passwordCandidateEncrypted = crypt(passwordCandidate, passwordEncrypted);
-
-    if(strcmp(passwordEncrypted, passwordCandidateEncrypted) == 0) {
-        cout << "Match" << endl;
-        return true;
-    } else {
-        return false;
-    }
-}
 
 char * findEncryptedPassword(ifstream* shadowFileStream) {
 
@@ -73,7 +47,7 @@ int main() {
         if(passwordEncrypted != NULL) {
             shadowFileStream.close();
             const char *passwordCandidate = "patrick";
-            encryptAndCompare(passwordEncrypted, passwordCandidate);
+            F->encryptAndCompare(passwordEncrypted, passwordCandidate);
         } else {
             cerr << "Error user not found" << endl;
         }
