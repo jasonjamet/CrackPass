@@ -17,7 +17,7 @@ char * findEncryptedPassword(ifstream* shadowFileStream) {
     cin >> username;
 
     string line;
-    char * passwordEncrypted;
+    char * passwordEncrypted = NULL;
     while (getline(*shadowFileStream, line)) {
         char *token = strtok(strdup(line.c_str()), ":");
         while(token != NULL) {
@@ -35,12 +35,7 @@ char * findEncryptedPassword(ifstream* shadowFileStream) {
 
 
 int main() {
-    // test
-    Functions *F = new Functions("salt", mdp);
 
-    F->bruteForce(4);
-
-    delete (F);
 
     string shadowFileName = "/home/jason/Dropbox/git/CrackPass/shadow";
     ifstream shadowFileStream;
@@ -49,9 +44,11 @@ int main() {
         char * passwordEncrypted = findEncryptedPassword(&shadowFileStream);
         if(passwordEncrypted != NULL) {
             shadowFileStream.close();
-            int i;
-            const char *passwordCandidate = "patrick";
-            F->encryptAndCompare(passwordEncrypted, passwordCandidate);
+            Functions *F = new Functions(passwordEncrypted);
+            F->bruteForce(4);
+            delete (F);
+            // const char *passwordCandidate = "patrick";
+            // F->encryptAndCompare(passwordEncrypted, passwordCandidate);
         } else {
             cerr << "Error user not found" << endl;
         }
