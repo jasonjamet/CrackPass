@@ -5,7 +5,7 @@
 #include "Functions.h"
 
 
-char *mdp = "aaaa";
+char *mdp = "test";
 
 
 
@@ -35,8 +35,11 @@ char * findEncryptedPassword(ifstream* shadowFileStream) {
 
 int main() {
 
+    Functions *F = new Functions(mdp);
+    F->bruteForce(4);
+    delete (F);
 
-    string shadowFileName = "/home/jason/Dropbox/git/CrackPass/shadow";
+    string shadowFileName = "/home/jason/Projects/CrackPass/shadow";
     ifstream shadowFileStream;
     shadowFileStream.open(shadowFileName);
     if (shadowFileStream.is_open()) {
@@ -45,9 +48,9 @@ int main() {
             shadowFileStream.close();
             Functions *F = new Functions(passwordEncrypted);
             F->bruteForce(4);
+            //const char *passwordCandidate = "patrick";
+            //F->encryptAndCompare(passwordEncrypted, passwordCandidate);
             delete (F);
-            // const char *passwordCandidate = "patrick";
-            // F->encryptAndCompare(passwordEncrypted, passwordCandidate);
         } else {
             cerr << "Error user not found" << endl;
         }
