@@ -33,7 +33,9 @@ void Functions::checkForce(char *str, int index, int max) {
             str[index] = characters[i];
             if (index == max - 1) {
                 if (encryptAndCompare(m_hash, str)) {
+                    cout << str << endl;
                     strcpy(password, (const char *)str);
+                    cout << str << endl;
                     break;
                 }
             } else {
@@ -45,6 +47,7 @@ void Functions::checkForce(char *str, int index, int max) {
 
 
 bool Functions::encryptAndCompare(const char *passwordEncrypted, const char * passwordCandidate) {
+    cout << passwordEncrypted << "  " << passwordCandidate << endl;
     char * passwordCandidateEncrypted = crypt(passwordCandidate, passwordEncrypted);
     return strcmp(passwordEncrypted, passwordCandidateEncrypted) == 0;
 }
