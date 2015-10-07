@@ -4,14 +4,13 @@
 
 #include "Functions.h"
 
-Functions::Functions(const char *hash): m_hash(hash) {
+Functions::Functions(const char *hash): m_hash(hash), m_password(NULL) {
 
 }
 
 void Functions::bruteForce(int max) {
 
     char *buf = (char *) malloc(max + 1);
-    m_password = NULL;
 
     for (int i = 1; i <= max; ++i) {
         memset(buf, 0, max + 1);
