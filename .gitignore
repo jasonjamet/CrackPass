@@ -6,6 +6,8 @@
 .idea/
 # if you remove the above rule, at least ignore the following:
 
+*.xml
+
 #User-specific stuff:
 .idea/workspace.xml
 .idea/tasks.xml

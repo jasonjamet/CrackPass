@@ -34,7 +34,6 @@ void Functions::checkForce(char *str, int index, int max) {
             if (index == max - 1) {
                 if (encryptAndCompare(str, m_hash)) {
                     strcpy(password, str);
-                    password = str;
                     break;
                 }
             } else {
