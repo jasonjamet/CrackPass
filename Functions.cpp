@@ -45,7 +45,6 @@ void Functions::checkForce(char *str, int index, int max) {
 
 
 bool Functions::encryptAndCompare(const char *passwordEncrypted, const char * passwordCandidate) {
-    cout << passwordEncrypted << "  " << passwordCandidate << endl;
     char * passwordCandidateEncrypted = crypt(passwordCandidate, passwordEncrypted);
     return strcmp(passwordEncrypted, passwordCandidateEncrypted) == 0;
 }
