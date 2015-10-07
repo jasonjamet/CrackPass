@@ -35,7 +35,7 @@ char * findEncryptedPassword(ifstream* shadowFileStream) {
 
 
 int main() {
-
+    // test
     Functions *F = new Functions("salt", mdp);
 
     F->bruteForce(4);
