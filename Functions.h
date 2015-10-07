@@ -25,11 +25,10 @@ private:
     char *m_password;
 
     void checkForce(char *str, int index, int max);
+    bool encryptAndCompare(const char * passwordCandidate);
 
 public:
     Functions(const char *hash);
-    bool encryptAndCompare(const char *passwordEncrypted, const char * passwordCandidate);
-
     void bruteForce(int max = 4);
 };
 
