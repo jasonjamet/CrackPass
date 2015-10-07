@@ -30,6 +30,7 @@ private:
 public:
     Functions(string salt, const char *hash);
 
+    bool encryptAndCompare(char *passwordEncrypted, const char * passwordCandidate);
     void bruteForce(int max = 4);
 };
 

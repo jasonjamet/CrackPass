@@ -3,6 +3,7 @@
 //
 
 #include <string.h>
+#include <crypt.h>
 #include "Functions.h"
 
 Functions::Functions(string salt, const char *hash) : m_salt(salt), m_hash(hash) {
@@ -43,4 +44,16 @@ bool Functions::checkForce(char *str, int index, int max) {
     }
 
     return false;
+}
+
+
+bool Functions::encryptAndCompare(char *passwordEncrypted, const char * passwordCandidate) {
+
+    char * passwordCandidateEncrypted = crypt(passwordCandidate, passwordEncrypted);
+
+    if(strcmp(passwordEncrypted, passwordCandidateEncrypted) == 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
