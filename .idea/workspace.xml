@@ -11,15 +11,7 @@
     </ADDITIONAL_GENERATION_ENVIRONMENT>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e418e6a6-18d4-43e2-9600-4a05453cfc8d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Functions.cpp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Functions.h" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/CrackPass.iml" afterPath="$PROJECT_DIR$/.idea/CrackPass.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.cpp" afterPath="$PROJECT_DIR$/main.cpp" />
-    </list>
+    <list default="true" id="e418e6a6-18d4-43e2-9600-4a05453cfc8d" name="Default" comment="" />
     <ignored path="CrackPass.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
