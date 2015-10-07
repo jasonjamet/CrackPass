@@ -2,15 +2,9 @@
 // Created by etudiant on 06/10/15.
 //
 
+#include "main.h"
 #include "Functions.h"
 
-/* Comments and TODDO
- *
- *
- *
- *
- */
-#include "main.h"
 
 
 char *mdp = "aaaa";
@@ -26,7 +20,7 @@ bool encryptAndCompare(char *passwordEncrypted, const char * passwordCandidate) 
     char * passwordCandidateEncrypted = crypt(passwordCandidate, passwordEncrypted);
 
     if(strcmp(passwordEncrypted, passwordCandidateEncrypted) == 0) {
-        cout << "Match" << endl;
+       // cout << "Match" << endl;
         return true;
     } else {
         return false;
@@ -72,7 +66,12 @@ int main() {
         char * passwordEncrypted = findEncryptedPassword(&shadowFileStream);
         if(passwordEncrypted != NULL) {
             shadowFileStream.close();
+            int i;
             const char *passwordCandidate = "patrick";
+
+            for(i = 0; i < 1000; i++) {
+                encryptAndCompare(passwordEncrypted, passwordCandidate);
+            }
             encryptAndCompare(passwordEncrypted, passwordCandidate);
         } else {
             cerr << "Error user not found" << endl;
