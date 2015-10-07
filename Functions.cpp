@@ -2,11 +2,9 @@
 // Created by etudiant on 06/10/15.
 //
 
-#include <string.h>
-#include <crypt.h>
 #include "Functions.h"
 
-Functions::Functions(string salt, const char *hash): m_hash(hash) {
+Functions::Functions(const char *hash): m_hash(hash) {
 
 }
 

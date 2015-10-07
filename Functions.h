@@ -1,12 +1,11 @@
-//
-// Created by etudiant on 06/10/15.
-//
-
 #ifndef CRACKPASS_FUNCTIONS_H
 #define CRACKPASS_FUNCTIONS_H
 
 #include <iostream>
-#include <string>
+#include <fstream>
+#include <string.h>
+#include <crypt.h>
+#include <sstream>
 
 using namespace std;
 
@@ -28,7 +27,7 @@ private:
     bool encryptAndCompare(char *passwordEncrypted, const char * passwordCandidate);
 
 public:
-    Functions(string salt, const char *hash);
+    Functions(const char *hash);
 
     void bruteForce(int max = 4);
 };
