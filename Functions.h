@@ -22,7 +22,7 @@ class Functions {
 
 private:
     const char *m_hash;
-    char *password;
+    char *m_password;
 
     void checkForce(char *str, int index, int max);
 

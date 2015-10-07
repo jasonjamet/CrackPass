@@ -11,14 +11,14 @@ Functions::Functions(const char *hash): m_hash(hash) {
 void Functions::bruteForce(int max) {
 
     char *buf = (char *) malloc(max + 1);
-    password = NULL;
+    m_password = NULL;
 
     for (int i = 1; i <= max; ++i) {
         memset(buf, 0, max + 1);
         checkForce(buf, 0, i);
 
-        if (password != NULL) {
-            printf("Trouve: %s\n", password);
+        if (m_password != NULL) {
+            printf("Trouve: %s\n", m_password);
             break;
         }
     }
@@ -28,14 +28,13 @@ void Functions::bruteForce(int max) {
 
 
 void Functions::checkForce(char *str, int index, int max) {
-    if (password == NULL) {
+    if (m_password == NULL) {
         for (int i = 0; i < characters_size; ++i) {
             str[index] = characters[i];
             if (index == max - 1) {
                 if (encryptAndCompare(m_hash, str)) {
-                    cout << str << endl;
-                    strcpy(password, (const char *)str);
-                    cout << str << endl;
+                    m_password = (char *) malloc(strlen(str));
+                    strcpy(m_password, (const char *)str);
                     break;
                 }
             } else {
