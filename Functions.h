@@ -29,8 +29,12 @@ private:
 
 public:
     Functions(const char *hash);
+    ~Functions();
+
     void bruteForce(int max = 4);
 };
 
+
+// [aA-zZ0-9&é~"#'{([|\-`è_\^ç@à\=+$¤£\])ù%*µ!§:};.,?<>² \/\\]+
 
 #endif //CRACKPASS_FUNCTIONS_H

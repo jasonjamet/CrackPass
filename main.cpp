@@ -29,7 +29,7 @@ char * findEncryptedPassword(ifstream* shadowFileStream) {
 
 
 int main() {
-    string shadowFileName = "/home/mattieu/Projets/CrackPass/shadow";
+    string shadowFileName = "/home/etudiant/Damota/CrackPass/shadow";
     ifstream shadowFileStream;
     shadowFileStream.open(shadowFileName);
     if (shadowFileStream.is_open()) {
