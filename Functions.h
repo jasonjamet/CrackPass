@@ -22,16 +22,19 @@ class Functions {
 
 private:
     const char *m_hash;
-    char *m_password;
+    char * m_password;
 
     void checkForce(char *str, int index, int max);
-    bool encryptAndCompare(const char * passwordCandidate);
+    bool encryptAndCompare(const char * passwordCandidate) const;
 
 public:
     Functions(const char *hash);
     ~Functions();
 
     void bruteForce(int max = 4);
+    void readFile();
+
+    char * getPassword() const;
 };
 
 

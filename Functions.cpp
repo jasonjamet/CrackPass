@@ -19,7 +19,6 @@ void Functions::bruteForce(int max) {
         checkForce(buf, 0, i);
 
         if (m_password != NULL) {
-            printf("Trouve: %s\n", m_password);
             break;
         }
     }
@@ -46,6 +45,33 @@ void Functions::checkForce(char *str, int index, int max) {
 }
 
 
-bool Functions::encryptAndCompare(const char * passwordCandidate) {
+
+void Functions::readFile() {
+
+    const int SIZE = 100;
+
+    FILE * database = NULL;
+    database = fopen("database.txt", "r");
+
+    char * line = (char*) malloc(SIZE);
+
+    while (fgets(line, SIZE, database) != NULL) {
+
+        if (encryptAndCompare(line)) {
+            strcpy(m_password, line);
+            break;
+        }
+
+    }
+
+    fclose(database);
+}
+
+
+bool Functions::encryptAndCompare(const char * passwordCandidate) const{
     return strcmp(m_hash, crypt(passwordCandidate, m_hash)) == 0;
+}
+
+char * Functions::getPassword() const {
+    return m_password;
 }

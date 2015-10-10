@@ -38,7 +38,14 @@ int main() {
             shadowFileStream.close();
             Functions *F = new Functions(passwordEncrypted);
             F->bruteForce(4);
+
+            if (F->getPassword() != NULL) {
+                printf("Mot de passe trouvé: %s\n", F->getPassword());
+            } else {
+                printf("Pas de mot de passe trouvée connard !\n");
+            }
             delete (F);
+
         } else {
             cerr << "Error user not found" << endl;
         }
