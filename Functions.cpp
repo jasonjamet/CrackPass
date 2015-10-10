@@ -1,5 +1,6 @@
 
 #include "Functions.h"
+#include "mpi.h"
 
 Functions::Functions(const char * hash): m_hash(hash), m_password(NULL), m_find(false) {
 
@@ -14,13 +15,12 @@ void Functions::bruteForce(int max) {
 
     char *buf = (char *) malloc(max + 1);
     int i;
-
+    
     #pragma omp master
     for (i = 1; i <= max; ++i) {
 
-        if (!m_find) {
-            memset(buf, 0, max + 1);
-            checkForce(buf, 0, i);
+        if (m_find) {
+           break;
         }
     }
 

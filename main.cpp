@@ -6,9 +6,9 @@
 
 char * findEncryptedPassword(ifstream* shadowFileStream) {
 
-    cout << "Please enter a username.\n";
-    string username;
-    cin >> username;
+    //cout << "Please enter a username.\n";
+    string username = "jason";
+    //cin >> username;
 
     string line;
     char * passwordEncrypted = NULL;
@@ -29,7 +29,7 @@ char * findEncryptedPassword(ifstream* shadowFileStream) {
 
 
 int main() {
-    string shadowFileName = "/home/etudiant/Damota/CrackPass/shadow";
+    string shadowFileName = "shadow";
     ifstream shadowFileStream;
     shadowFileStream.open(shadowFileName);
     if (shadowFileStream.is_open()) {
