@@ -24,12 +24,11 @@ char * findEncryptedPassword(ifstream* shadowFileStream) {
         }
     }
     return passwordEncrypted;
-
 }
 
 
 int main() {
-    string shadowFileName = "/home/mattieu/Projets/CrackPass/shadow";
+    string shadowFileName = "/home/jason/Dropbox/git/CrackPass/shadow";
     ifstream shadowFileStream;
     shadowFileStream.open(shadowFileName);
     if (shadowFileStream.is_open()) {

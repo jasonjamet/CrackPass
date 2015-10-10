@@ -3,7 +3,6 @@
 //
 
 #include "Functions.h"
-
 Functions::Functions(const char *hash): m_hash(hash), m_password(NULL) {
 
 }
