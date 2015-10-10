@@ -23,6 +23,7 @@ class Functions {
 private:
     const char *m_hash;
     char * m_password;
+    bool m_find;
 
     void checkForce(char *str, int index, int max);
     bool encryptAndCompare(const char * passwordCandidate) const;
