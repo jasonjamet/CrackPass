@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "QFile"
 #include "QPalette"
+#include "../../Functions.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,10 +20,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButton1->setPalette(palette);
     ui->centralWidget->setPalette(palette);
 
-    if(!LoadFile("/home/etudiant/file.txt"))
-    {
-        ui->comboBox->addItem("Error during opening file");
+
+    Functions *F = new Functions();
+    map<string, string> userAndPass = F->readShadowFile("shadow");
+    for (map<string ,string>::iterator it=userAndPass.begin(); it!=userAndPass.end(); ++it) {
+        ui->comboBox->addItem(it->first.c_str());
     }
+    //F->lauchSimpleBruteForce(F->getPasswordEncryptedByName(, "jason"), 4);
+    delete (F);
 
 
 }
@@ -31,25 +36,6 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-bool MainWindow::LoadFile(QString FileName)
-{
-    QFile file(FileName);
-
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))return false;
-        else
-        {
-            while (!file.atEnd())
-            {
-                QString line = file.readLine();
-                ui->comboBox->addItem(line);
-            }
-            return true;
-        }
-
-        file.close();
-}
-
 void MainWindow::on_pushButton1_clicked()
 {
     research = new Research(this);

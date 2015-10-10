@@ -12,7 +12,7 @@ CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_WEBKIT -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED
 CFLAGS        = -m64 -pipe -g -Wall -W -D_REENTRANT $(DEFINES)
-CXXFLAGS      = -m64 -pipe -g -Wall -W -D_REENTRANT $(DEFINES)
+CXXFLAGS      = -m64 -pipe -g -Wall -W -D_REENTRANT $(DEFINES) -std=c++11 -lcrypt -O3 -fopenmp -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread -L/usr//lib -L/usr/lib/openmpi/lib -lmpi_cxx -lmpi -ldl -lhwloc
 INCPATH       = -I/usr/share/qt4/mkspecs/linux-g++-64 -I../Crack -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4 -I. -I. -I../Crack -I.
 LINK          = g++
 LFLAGS        = -m64
@@ -45,10 +45,12 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../Crack/main.cpp \
 		../Crack/mainwindow.cpp \
+		../../Functions.cpp \
 		../Crack/research.cpp moc_mainwindow.cpp \
 		moc_research.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
+		Functions.o \
 		research.o \
 		moc_mainwindow.o \
 		moc_research.o
@@ -108,7 +110,7 @@ first: all
 all: Makefile $(TARGET)
 
 $(TARGET): ui_mainwindow.h ui_research.h $(OBJECTS)  
-	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
+	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS) $(CXXFLAGS)
 	{ test -n "$(DESTDIR)" && DESTDIR="$(DESTDIR)" || DESTDIR=.; } && test $$(gdb --version | sed -e 's,[^0-9][^0-9]*\([0-9]\)\.\([0-9]\).*,\1\2,;q') -gt 72 && gdb --nx --batch --quiet -ex 'set confirm off' -ex "save gdb-index $$DESTDIR" -ex quit '$(TARGET)' && test -f $(TARGET).gdb-index && objcopy --add-section '.gdb_index=$(TARGET).gdb-index' --set-section-flags '.gdb_index=readonly' '$(TARGET)' '$(TARGET)' && rm -f $(TARGET).gdb-index || true
 
 Makefile: ../Crack/Crack.pro  /usr/share/qt4/mkspecs/linux-g++-64/qmake.conf /usr/share/qt4/mkspecs/common/unix.conf \
@@ -231,13 +233,17 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 ####### Compile
 
 main.o: ../Crack/main.cpp ../Crack/mainwindow.h \
-		../Crack/research.h
+		../Crack/research.h \
+		../../Functions.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Crack/main.cpp
 
 mainwindow.o: ../Crack/mainwindow.cpp ../Crack/mainwindow.h \
 		../Crack/research.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Crack/mainwindow.cpp
+
+Functions.o: ../../Functions.cpp ../../Functions.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Functions.o ../../Functions.cpp
 
 research.o: ../Crack/research.cpp ../Crack/research.h \
 		ui_research.h

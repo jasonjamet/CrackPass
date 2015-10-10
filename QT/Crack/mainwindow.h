@@ -16,8 +16,6 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    bool LoadFile(QString File);
-
 private slots:
     void on_pushButton1_clicked();
 
