@@ -81,13 +81,13 @@ void Functions::lauchSimpleBruteForce(const char * passwordEncrypted, int maxLen
 void Functions::bruteForce(int max) {
 
     char *buf = (char *) malloc(max + 1);
-
-    for (int i = 1; i <= max; ++i) {
-        memset(buf, 0, max + 1);
-        checkForce(buf, 0, i);
+    int i;
+    
+    #pragma omp master
+    for (i = 1; i <= max; ++i) {
 
         if (m_find) {
-            break;
+           break;
         }
     }
 
@@ -95,17 +95,27 @@ void Functions::bruteForce(int max) {
 }
 
 
-void Functions::checkForce(char *str, int index, int max) {
+void Functions::checkForce(char * str, int index, int max) {
 
-    for (int i = 0; i < characters_size; ++i) {
+    int i;
+
+    #pragma omp parallel for \
+    default(shared) private(i) schedule(dynamic)
+    for (i = 0; i < characters_size; ++i) {
         if (!m_find) {
             str[index] = characters[i];
             if (index == max - 1) {
-                if (encryptAndCompare(str)) {
+
+                char passwordCandidate[strlen(str)];
+                strcpy(passwordCandidate, str);
+
+                if (encryptAndCompare(passwordCandidate)) {
                     m_find = true;
-                    m_password = (char *) malloc(strlen(str));
-                    strcpy(m_password, (const char *) str);
+                    m_password = (char *) malloc(strlen(passwordCandidate));
+                    strcpy(m_password, passwordCandidate);
+                    #pragma omp flush (m_find)
                 }
+
             } else {
                 checkForce(str, index + 1, max);
             }
