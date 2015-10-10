@@ -3,14 +3,22 @@
 //
 
 #include "Functions.h"
+#include "QT/Crack/mainwindow.h"
+#include <QApplication>
 
 
 
-int main() {
+    int main(int argc, char *argv[])
+    {
+        QApplication a(argc, argv);
+        MainWindow w;
+        w.show();
 
-    Functions *F = new Functions();
-    F->lauchSimpleBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"), 4);
-    delete (F);
+        return a.exec();
+    }
 
-    return 0;
-}
+    //Functions *F = new Functions();
+    //F->lauchSimpleBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"), 4);
+    //delete (F);
+
+    //return 0;
