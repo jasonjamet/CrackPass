@@ -7,6 +7,7 @@
 #include <crypt.h>
 #include <unistd.h>
 #include <sstream>
+#include <map>
 
 using namespace std;
 
@@ -29,8 +30,12 @@ private:
     bool encryptAndCompare(const char * passwordCandidate) const;
 
 public:
-    Functions(const char *hash);
+    Functions();
     ~Functions();
+
+    map<string, string> readShadowFile(string shadowFileName);
+    const char * getPasswordEncryptedByName(map<string, string> userAndPass, string userName);
+    void lauchSimpleBruteForce(const char * passwordEncrypted, int maxLength);
 
     void bruteForce(int max = 4);
     void readFile();
