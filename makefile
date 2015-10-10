@@ -1,2 +1,4 @@
 all:
-	clear && g++ -std=c++11 *.cpp -lcrypt -O3 -fopenmp -o Prog && ./Prog
+    # clear && g++ -std=c++11 *.cpp -lcrypt -O3 -fopenmp -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread -L/usr//lib -L/usr/lib/openmpi/lib -lmpi_cxx -lmpi -ldl -lhwloc -o Prog && ./Prog
+	g++ -c -m64 -pipe -g -Wall -W -D_REENTRANT -fPIE -DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I../Crack -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I. -I. -I. -o mainwindow.o QT/Crack/mainwindow.cpp
+	g++ -m64 -o Crack QT/build-Crack-Desktop-Debug/main.o QT/build-Crack-Desktop-Debug/mainwindow.o QT/build-Crack-Desktop-Debug/research.o QT/build-Crack-Desktop-Debug/moc_mainwindow.o QT/build-Crack-Desktop-Debug/moc_research.o   -L/usr/X11R6/lib64 -lQt5Widgets -L/usr/lib/x86_64-linux-gnu -lQt5Gui -lQt5Core -lGL -lpthread
