@@ -1,11 +1,13 @@
-//
-// Created by etudiant on 06/10/15.
-//
 
 #include "Functions.h"
 Functions::Functions(const char *hash): m_hash(hash), m_password(NULL) {
 
 }
+
+Functions::~Functions() {
+    delete m_password;
+}
+
 
 void Functions::bruteForce(int max) {
 
