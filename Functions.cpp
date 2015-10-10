@@ -1,6 +1,6 @@
 
 #include "Functions.h"
-
+#include "mpi.h"
 Functions::Functions(const char * hash): m_hash(hash), m_password(NULL), m_find(false) {
 
 }
@@ -29,7 +29,6 @@ void Functions::bruteForce(int max) {
 
 void Functions::checkForce(char *str, int index, int max) {
 
-#pragma omp parallel for
     for (int i = 0; i < characters_size; ++i) {
         if (!m_find) {
             str[index] = characters[i];
@@ -38,7 +37,6 @@ void Functions::checkForce(char *str, int index, int max) {
                     m_find = true;
                     m_password = (char *) malloc(strlen(str));
                     strcpy(m_password, (const char *) str);
-#pragma omp flush (m_find)
                 }
             } else {
                 checkForce(str, index + 1, max);

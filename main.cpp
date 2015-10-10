@@ -6,9 +6,9 @@
 
 char * findEncryptedPassword(ifstream* shadowFileStream) {
 
-    cout << "Please enter a username.\n";
-    string username;
-    cin >> username;
+    //cout << "Please enter a username.\n";
+    string username = "jason";
+    //cin >> username;
 
     string line;
     char * passwordEncrypted = NULL;
