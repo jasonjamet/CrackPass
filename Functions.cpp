@@ -1,6 +1,6 @@
 
 #include "Functions.h"
-#include "mpi.h"
+//#include "mpi.h"
 
 Functions::Functions(const char * hash): m_hash(hash), m_password(NULL), m_find(false) {
 
@@ -19,7 +19,7 @@ void Functions::bruteForce(int max) {
     #pragma omp master
     for (i = 1; i <= max; ++i) {
 
-        if (m_find) {
+        if (!m_find) {
            break;
         }
     }
@@ -41,6 +41,8 @@ void Functions::checkForce(char * str, int index, int max) {
 
                 char passwordCandidate[strlen(str)];
                 strcpy(passwordCandidate, str);
+
+                cout << str << endl;
 
                 if (encryptAndCompare(passwordCandidate)) {
                     m_find = true;

@@ -37,7 +37,7 @@ int main() {
         if(passwordEncrypted != NULL) {
             shadowFileStream.close();
             Functions *F = new Functions(passwordEncrypted);
-            F->bruteForce(4);
+            F->bruteForce(5);
 
             if (F->getPassword() != NULL) {
                 printf("Mot de passe trouvé: %s\n", F->getPassword());

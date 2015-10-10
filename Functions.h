@@ -13,8 +13,8 @@ using namespace std;
 
 static const char characters[] = "abcdefghijklmnopqrstuvwxyz"
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        "0123456789"
-        "&é~\"#'{([|-`è_\\^ç@à])}=+$¤£ù%*µ!§:/;.,?<>² ";
+        "0123456789";
+//"&é~\"#'{([|-`è_\\^ç@à])}=+$¤£ù%*µ!§:/;.,?<>² "
 
 static const int characters_size = sizeof(characters) - 1;
 
