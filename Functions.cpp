@@ -55,6 +55,7 @@ void Functions::readFile() {
 
     char * line = (char*) malloc(SIZE);
 
+    #pragma omp parallel
     while (fgets(line, SIZE, database) != NULL) {
 
         if (encryptAndCompare(line)) {

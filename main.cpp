@@ -29,7 +29,7 @@ char * findEncryptedPassword(ifstream* shadowFileStream) {
 
 
 int main() {
-    string shadowFileName = "/home/etudiant/Damota/CrackPass/shadow";
+    string shadowFileName = "/home/etudiant/Project_C/CrackPass/shadow";
     ifstream shadowFileStream;
     shadowFileStream.open(shadowFileName);
     if (shadowFileStream.is_open()) {
@@ -42,7 +42,7 @@ int main() {
             if (F->getPassword() != NULL) {
                 printf("Mot de passe trouvé: %s\n", F->getPassword());
             } else {
-                printf("Pas de mot de passe trouvée connard !\n");
+                printf("Pas de mot de passe trouvé !\n");
             }
             delete (F);
 
