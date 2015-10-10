@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "../build-Crack-Desktop-Debug/ui_mainwindow.h"
+#include "ui_mainwindow.h"
 #include "QFile"
 #include "QPalette"
 
@@ -46,6 +46,8 @@ bool MainWindow::LoadFile(QString FileName)
             }
             return true;
         }
+
+        file.close();
 }
 
 void MainWindow::on_pushButton1_clicked()

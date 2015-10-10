@@ -1,5 +1,5 @@
 #include "research.h"
-#include "../build-Crack-Desktop-Debug/ui_research.h"
+#include "ui_research.h"
 
 Research::Research(QWidget *parent) :
     QMainWindow(parent),
