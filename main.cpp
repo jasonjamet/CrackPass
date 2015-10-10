@@ -4,17 +4,16 @@
 
 #include "Functions.h"
 
-char * findEncryptedPassword(FILE* shadowFileStream) {
+char * findEncryptedPassword(ifstream* shadowFileStream) {
 
     cout << "Please enter a username.\n";
     string username;
     cin >> username;
 
-    char * line = (char *) malloc(200);
+    string line;
     char * passwordEncrypted = NULL;
-    while (fgets(line, strlen(line), shadowFileStream) != NULL) {
-        cout << line << endl;
-        char *token = strtok(strdup(line), ":");
+    while (getline(*shadowFileStream, line)) {
+        char *token = strtok(strdup(line.c_str()), ":");
         while(token != NULL) {
             if(strcmp(username.c_str(),token) == 0) {
                 token = strtok (NULL, ":");
@@ -25,20 +24,28 @@ char * findEncryptedPassword(FILE* shadowFileStream) {
         }
     }
     return passwordEncrypted;
+
 }
 
 
 int main() {
-    string shadowFileName = "./shadow";
-    FILE *fp = NULL;
-    fp = fopen(shadowFileName.c_str(), "r");
-    cout << fp << endl;
-    if (fp !=NULL) {
-        char *passwordEncrypted = findEncryptedPassword(fp);
+    string shadowFileName = "shadow";
+    ifstream shadowFileStream;
+    shadowFileStream.open(shadowFileName);
+    if (shadowFileStream.is_open()) {
+        char * passwordEncrypted = findEncryptedPassword(&shadowFileStream);
         if(passwordEncrypted != NULL) {
+            shadowFileStream.close();
             Functions *F = new Functions(passwordEncrypted);
             F->bruteForce(4);
+
+            if (F->getPassword() != NULL) {
+                printf("Mot de passe trouvé: %s\n", F->getPassword());
+            } else {
+                printf("Pas de mot de passe trouvée connard !\n");
+            }
             delete (F);
+
         } else {
             cerr << "Error user not found" << endl;
         }
