@@ -1,6 +1,6 @@
 
 #include "Functions.h"
-
+#include <omp.h>
 Functions::Functions(): m_hash(NULL), m_password(NULL), m_find(false) {
 
 }
@@ -58,7 +58,7 @@ const char * Functions::getPasswordEncryptedByName(map<string, string> userAndPa
 /*
  * Launch a simple bruteforce to decrypt an given encrypted password.
  * Parameters: const char *, int (maxlength)
- * Return : const char *
+ * Return : void
  */
 void Functions::lauchSimpleBruteForce(const char * passwordEncrypted, int maxLength) {
     if(passwordEncrypted != NULL) {
@@ -83,9 +83,7 @@ void Functions::bruteForce(int max) {
     char *buf = (char *) malloc(max + 1);
     int i;
     
-    #pragma omp master
     for (i = 1; i <= max; ++i) {
-
         if (!m_find) {
            break;
         }
@@ -99,8 +97,6 @@ void Functions::checkForce(char * str, int index, int max) {
 
     int i;
 
-    #pragma omp parallel for \
-    default(shared) private(i) schedule(dynamic)
     for (i = 0; i < characters_size; ++i) {
         if (!m_find) {
             str[index] = characters[i];
@@ -115,7 +111,6 @@ void Functions::checkForce(char * str, int index, int max) {
                     m_find = true;
                     m_password = (char *) malloc(strlen(passwordCandidate));
                     strcpy(m_password, passwordCandidate);
-                    #pragma omp flush (m_find)
                 }
 
             } else {
@@ -125,30 +120,60 @@ void Functions::checkForce(char * str, int index, int max) {
     }
 }
 
-void Functions::readFile() {
 
-    const int SIZE = 100;
+/*
+ * Launch a dictionary based bruteforce to decrypt an given encrypted password.
+ * Parameters: const char *
+ * Return : void
+ */
+void Functions::lauchDictionaryBruteForce(const char * passwordEncrypted) {
+    if(passwordEncrypted != NULL) {
+        const int SIZE = 100;
+        FILE * database = NULL;
+        database = fopen("database.txt", "r");
+        struct crypt_data data;
 
-    FILE * database = NULL;
-    database = fopen("database.txt", "r");
 
-    char * line = (char*) malloc(SIZE);
+        long lSize;
+        fseek (database , 0 , SEEK_END);
+        lSize = ftell (database);
+        rewind (database);
+        cout << lSize << endl;
 
-    #pragma omp parallel
-    while (fgets(line, SIZE, database) != NULL) {
+        char * line = (char*) malloc(SIZE);
 
-        if (encryptAndCompare(line)) {
-            strcpy(m_password, line);
-            break;
+
+        #pragma omp parallel for private(data)
+        for (int i = 0; i < lSize; i++) {
+            if(!m_find) {
+                data.initialized = 0;
+
+                string lineCpy = fgets(line, SIZE, database);
+
+                if (encryptAndCompareDictionary(lineCpy, &data)) {
+                    cout << lineCpy << endl;
+                    m_password = (char *) malloc(lineCpy.size());
+                    strcpy(m_password, lineCpy.c_str());
+                    i = lSize;
+                    m_find = true;
+                }
+            } else {
+                i = lSize;
+            }
         }
+        fclose(database);
 
+    } else {
+        cerr << "Error password not found" << endl;
     }
-
-    fclose(database);
 }
 
 
-bool Functions::encryptAndCompare(const char * passwordCandidate) const{
+bool Functions::encryptAndCompareDictionary(string passwordCandidate, crypt_data *data) const{
+    return strcmp(crypt_r(strtok((char *) passwordCandidate.c_str(), "\n"), m_hash, data), m_hash) == 0;
+}
+
+bool Functions::encryptAndCompare(char * passwordCandidate) const{
     return strcmp(m_hash, crypt(passwordCandidate, m_hash)) == 0;
 }
 

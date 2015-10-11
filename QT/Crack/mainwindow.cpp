@@ -26,10 +26,10 @@ MainWindow::MainWindow(QWidget *parent) :
     for (map<string ,string>::iterator it=userAndPass.begin(); it!=userAndPass.end(); ++it) {
         ui->comboBox->addItem(it->first.c_str());
     }
-    //F->lauchSimpleBruteForce(F->getPasswordEncryptedByName(, "jason"), 4);
+    //F->lauchSimpleBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"), 4);
+    //F->lauchDictionaryBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"));
+
     delete (F);
-
-
 }
 
 MainWindow::~MainWindow()
@@ -38,6 +38,7 @@ MainWindow::~MainWindow()
 }
 void MainWindow::on_pushButton1_clicked()
 {
+
     research = new Research(this);
     research->show();
 }

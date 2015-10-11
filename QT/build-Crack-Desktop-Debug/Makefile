@@ -16,9 +16,9 @@ CXXFLAGS      = -m64 -pipe -g -Wall -W -D_REENTRANT $(DEFINES) -std=c++11 -lcryp
 INCPATH       = -I/usr/share/qt4/mkspecs/linux-g++-64 -I../Crack -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4 -I. -I. -I../Crack -I.
 LINK          = g++
 LFLAGS        = -m64
-LIBS          = $(SUBLIBS)  -L/usr/lib/x86_64-linux-gnu -lQtGui -lQtCore -lpthread 
+LIBS          = $(SUBLIBS)  -L/usr/lib/x86_64-linux-gnu -lQtGui -lQtCore -lpthread
 AR            = ar cqs
-RANLIB        = 
+RANLIB        =
 QMAKE         = /usr/lib/x86_64-linux-gnu/qt4/bin/qmake
 TAR           = tar -cf
 COMPRESS      = gzip -9f
@@ -82,7 +82,7 @@ DIST          = /usr/share/qt4/mkspecs/common/unix.conf \
 		/usr/share/qt4/mkspecs/features/include_source_dir.prf \
 		../Crack/Crack.pro
 QMAKE_TARGET  = Crack
-DESTDIR       = 
+DESTDIR       =
 TARGET        = Crack
 
 first: all
@@ -109,7 +109,7 @@ first: all
 
 all: Makefile $(TARGET)
 
-$(TARGET): ui_mainwindow.h ui_research.h $(OBJECTS)  
+$(TARGET): ui_mainwindow.h ui_research.h $(OBJECTS)
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS) $(CXXFLAGS)
 	{ test -n "$(DESTDIR)" && DESTDIR="$(DESTDIR)" || DESTDIR=.; } && test $$(gdb --version | sed -e 's,[^0-9][^0-9]*\([0-9]\)\.\([0-9]\).*,\1\2,;q') -gt 72 && gdb --nx --batch --quiet -ex 'set confirm off' -ex "save gdb-index $$DESTDIR" -ex quit '$(TARGET)' && test -f $(TARGET).gdb-index && objcopy --add-section '.gdb_index=$(TARGET).gdb-index' --set-section-flags '.gdb_index=readonly' '$(TARGET)' '$(TARGET)' && rm -f $(TARGET).gdb-index || true
 
@@ -173,12 +173,12 @@ Makefile: ../Crack/Crack.pro  /usr/share/qt4/mkspecs/linux-g++-64/qmake.conf /us
 qmake:  FORCE
 	@$(QMAKE) -spec /usr/share/qt4/mkspecs/linux-g++-64 CONFIG+=debug -o Makefile ../Crack/Crack.pro
 
-dist: 
-	@$(CHK_DIR_EXISTS) .tmp/Crack1.0.0 || $(MKDIR) .tmp/Crack1.0.0 
+dist:
+	@$(CHK_DIR_EXISTS) .tmp/Crack1.0.0 || $(MKDIR) .tmp/Crack1.0.0
 	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/Crack1.0.0/ && $(COPY_FILE) --parents ../Crack/mainwindow.h ../Crack/research.h .tmp/Crack1.0.0/ && $(COPY_FILE) --parents ../Crack/main.cpp ../Crack/mainwindow.cpp ../Crack/research.cpp .tmp/Crack1.0.0/ && $(COPY_FILE) --parents ../Crack/mainwindow.ui ../Crack/research.ui .tmp/Crack1.0.0/ && (cd `dirname .tmp/Crack1.0.0` && $(TAR) Crack1.0.0.tar Crack1.0.0 && $(COMPRESS) Crack1.0.0.tar) && $(MOVE) `dirname .tmp/Crack1.0.0`/Crack1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/Crack1.0.0
 
 
-clean:compiler_clean 
+clean:compiler_clean
 	-$(DEL_FILE) $(OBJECTS)
 	-$(DEL_FILE) *~ core *.core
 
@@ -186,7 +186,7 @@ clean:compiler_clean
 ####### Sub-libraries
 
 distclean: clean
-	-$(DEL_FILE) $(TARGET) 
+	-$(DEL_FILE) $(TARGET)
 	-$(DEL_FILE) Makefile
 
 
@@ -228,7 +228,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_moc_header_clean compiler_uic_clean
 
 ####### Compile
 
