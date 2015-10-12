@@ -11,6 +11,8 @@
 
 using namespace std;
 
+struct crypt_data;
+
 class Functions {
 
 private:
@@ -22,7 +24,7 @@ private:
 
 
     void checkForce(char *str, int index, int max);
-    bool encryptAndCompareDictionary(string passwordCandidate) const;
+    bool encryptAndCompareDictionary(string passwordCandidate, crypt_data data) const;
     bool encryptAndCompare(char * passwordCandidate) const;
 
 

@@ -6,6 +6,7 @@ Functions::Functions(): m_hash(NULL), m_password(NULL), m_find(false) {
 
 Functions::~Functions() {
 }
+
 struct crypt_data data;
 
 map<string, string> Functions::readShadowFile(string shadowFileName) {
@@ -69,9 +70,9 @@ void Functions::checkForce(int longueur, char begin, char end) {
     schedule(dynamic) default(shared)*/
 
 
-    //#pragma omp parallel
-    /*while(code[longueur-1] < end) {
-        if (!m_find) {
+    #pragma omp parallel
+    while(code[longueur-1] < end) {
+       /* if (!m_find) {
             i = 0;
             //#pragma omp parallel
             while (code[i] > end && code[i + 1] != 0) {
@@ -92,8 +93,8 @@ void Functions::checkForce(int longueur, char begin, char end) {
             code[0]++;
         } else {
             code[longueur-1] = end;
-        }
-    }*/
+        }*/
+    }
 }
 
 void Functions::launchDictionaryBruteForce() {
@@ -101,6 +102,7 @@ void Functions::launchDictionaryBruteForce() {
         const int SIZE = 100;
         FILE * database = NULL;
         database = fopen("database.txt", "r");
+        crypt_data localData;
 
 
         long lSize;
@@ -112,14 +114,14 @@ void Functions::launchDictionaryBruteForce() {
         char * line = (char*) malloc(SIZE);
 
 
-        #pragma omp parallel for private(data)
+        #pragma omp parallel for private(localData)
         for (int i = 0; i < lSize; i++) {
             if(!m_find) {
                 data.initialized = 0;
 
                 string lineCpy = fgets(line, SIZE, database);
 
-                if (encryptAndCompareDictionary(lineCpy)) {
+                if (encryptAndCompareDictionary(lineCpy, localData)) {
                     cout << lineCpy << endl;
                     m_password = (char *) malloc(lineCpy.size());
                     strcpy(m_password, lineCpy.c_str());
@@ -138,8 +140,8 @@ void Functions::launchDictionaryBruteForce() {
 }
 
 
-bool Functions::encryptAndCompareDictionary(string passwordCandidate) const{
-    return strcmp(crypt_r(strtok((char *) passwordCandidate.c_str(), "\n"), m_hash, &data), m_hash) == 0;
+bool Functions::encryptAndCompareDictionary(string passwordCandidate, crypt_data localData) const{
+    return strcmp(crypt_r(strtok((char *) passwordCandidate.c_str(), "\n"), m_hash, &localData), m_hash) == 0;
 }
 
 bool Functions::encryptAndCompare(char * passwordCandidate) const{
