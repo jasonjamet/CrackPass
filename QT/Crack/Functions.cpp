@@ -5,16 +5,12 @@ Functions::Functions(): m_hash(NULL), m_password(NULL), m_find(false) {
 }
 
 Functions::~Functions() {
-    delete m_password;
 }
 
-/*
- * Read the shadow file to get an associative array of userName/encryptedPassword
- * Parameters: String (Path and name of the shadow file)
- * Return : map<string, string>
- */
+struct crypt_data data;
+
 map<string, string> Functions::readShadowFile(string shadowFileName) {
-    map<string,string> userAndPass;
+    map<string, string> userAndPass;
 
     ifstream shadowFileStream;
     shadowFileStream.open(shadowFileName);
@@ -22,9 +18,9 @@ map<string, string> Functions::readShadowFile(string shadowFileName) {
         string line;
         while (getline(shadowFileStream, line)) {
             char *token = strtok(strdup(line.c_str()), ":");
-            while(token != NULL) {
-                userAndPass[token] = strtok (NULL, ":");
-                token = strtok (NULL, ":");
+            while (token != NULL) {
+                userAndPass[token] = strtok(NULL, ":");
+                token = strtok(NULL, ":");
             }
         }
         shadowFileStream.close();
@@ -35,96 +31,90 @@ map<string, string> Functions::readShadowFile(string shadowFileName) {
     return userAndPass;
 }
 
-
-/*
- * Get the encrypted password of a given userName
- * Parameters: map<string, string>, userName
- * Return : const char *
- */
-const char * Functions::getPasswordEncryptedByName(map<string, string> userAndPass, string userName) {
-    // for (map<string ,string>::iterator it=userAndPass.begin(); it!=userAndPass.end(); ++it) {
-    //     cout << it->first << " => " << it->second << '\n';
-    // }
-    if(!userAndPass.empty() && userAndPass.count(userName) == 1) {
-        this->m_hash = userAndPass[userName].c_str();
-        return this->m_hash;
+const char *Functions::getPasswordEncryptedByName(map<string, string> userAndPass, string userName) {
+    if (!userAndPass.empty() && userAndPass.count(userName) == 1) {
+        m_hash = userAndPass[userName].c_str();
+        return m_hash;
     } else {
         cerr << "Error name not found, or multiple name" << endl;
         return NULL;
     }
 }
 
-/*
- * Launch a simple bruteforce to decrypt an given encrypted password.
- * Parameters: const char *, int (maxlength)
- * Return : void
- */
-void Functions::lauchSimpleBruteForce(const char * passwordEncrypted, int maxLength) {
-    if(passwordEncrypted != NULL) {
-        this->bruteForce(maxLength);
+void Functions::decryptPassword(const char *passwordEncrypted, int maxLength) {
 
-        if (this->getPassword() != NULL) {
-            printf("Mot de passe trouvé: %s\n", getPassword());
-        } else {
-            printf("Pas de mot de passe trouvée connard !\n");
-        }
-    } else {
-        cerr << "Error password not found" << endl;
-    }
-}
+    data.initialized = 0;
+    if (passwordEncrypted != NULL) {
+        printf("Lancement de la recherche du mot de passe dans le fichier 'Database'\n");
+        if (readFile()) {
+            if (!m_find) {
+                printf("Le password n'a pas été trouvé dans le dictionnaire !\n");
 
+                printf("Lancement du bruteForce avec au maximum %d caractères !\n", maxLength);
+                bruteForce(maxLength);
 
-
-
-
-void Functions::bruteForce(int max) {
-
-    char *buf = (char *) malloc(max + 1);
-    int i;
-    
-    for (i = 1; i <= max; ++i) {
-        if (!m_find) {
-           break;
-        }
-    }
-
-    free(buf);
-}
-
-
-void Functions::checkForce(char * str, int index, int max) {
-
-    int i;
-
-    for (i = 0; i < characters_size; ++i) {
-        if (!m_find) {
-            str[index] = characters[i];
-            if (index == max - 1) {
-
-                char passwordCandidate[strlen(str)];
-                strcpy(passwordCandidate, str);
-
-                cout << str << endl;
-
-                if (encryptAndCompare(passwordCandidate)) {
-                    m_find = true;
-                    m_password = (char *) malloc(strlen(passwordCandidate));
-                    strcpy(m_password, passwordCandidate);
+                if (m_find) {
+                    cout <<  "Mot de passe trouvé: " << m_password << endl;
                 }
-
             } else {
-                checkForce(str, index + 1, max);
+                cout <<  "Mot de passe trouvé: " << m_password << endl;
+            }
+        } else {
+            printf("Une erreur s'est produite lors de l'ouverture du fichier 'Database'\n");
+            printf("Lancement du bruteForce avec au maximum %d caractères !\n", maxLength);
+            bruteForce(maxLength);
+
+            if (m_find) {
+                cout <<  "Mot de passe trouvé: " << m_password << endl;
             }
         }
+    } else {
+        printf("Aucun mot de passe défini !\n");
     }
 }
 
 
-/*
- * Launch a dictionary based bruteforce to decrypt an given encrypted password.
- * Parameters: const char *
- * Return : void
- */
+void Functions::bruteForce(int LongueurMax) {
+    for (int longueur=1; longueur <= LongueurMax; longueur++) {
+        checkForce(longueur, 'a', 'z');
+    }
+}
+
+
+void Functions::checkForce(int longueur, char begin, char end) {
+
+    char code[255]; // tableau contenant le code
+    int i;
+
+    #pragma omp parallel for\
+    schedule(dynamic) default(shared)
+    for (int i=0; i < longueur; i++) {
+        code[i] = begin;
+    }
+
+    code[longueur] = 0;
+
+    //#pragma omp parallel
+
+    /*#pragma omp parallel for\
+    schedule(dynamic) default(shared)*/
+    while(code[longueur-1] < end)
+    {
+
+        i = 0;
+        while(code[i] > end && code[i+1] != 0)
+        {
+            code[i] = begin;
+            code[++i]++;
+        }
+
+        cout << code  << endl;
+
+        code[0]++;
+    }
+
+}
+
 void Functions::lauchDictionaryBruteForce(const char * passwordEncrypted) {
     if(passwordEncrypted != NULL) {
         const int SIZE = 100;
@@ -142,7 +132,7 @@ void Functions::lauchDictionaryBruteForce(const char * passwordEncrypted) {
         char * line = (char*) malloc(SIZE);
 
 
-        #pragma omp parallel for private(data)
+#pragma omp parallel for private(data)
         for (int i = 0; i < lSize; i++) {
             if(!m_find) {
                 data.initialized = 0;
