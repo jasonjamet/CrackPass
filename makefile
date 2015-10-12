@@ -7,4 +7,3 @@ all:
 clean:
 	rm -rf *.o Prog Crack
 	cd QT/build-Crack-Desktop-Debug/ && $(MAKE) clean
-	

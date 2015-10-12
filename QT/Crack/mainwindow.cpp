@@ -6,7 +6,7 @@
 #include "QTimer"
 #include "QLCDNumber"
 #include "QMessageBox"
-
+#include <time.h>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -65,6 +65,7 @@ void MainWindow::on_ConfirmButton_clicked()
     ui->radioOpenMP->setEnabled(false);
     ui->textPassword->setText("Searching password ...");
 
+<<<<<<< HEAD
     //this->secondes = 0;
     //this->timer = new QTimer(this);
     //this->timer->start(1000);
@@ -111,8 +112,12 @@ void MainWindow::on_ConfirmButton_clicked()
 
 
 
-    m_F->lauchDictionaryBruteForce(m_F->getPasswordEncryptedByName(m_F->readShadowFile("shadow"), getUserName().toLatin1().data()));
+    
+    time_t start = time(NULL);
 
+    m_F->getPasswordEncryptedByName(m_F->readShadowFile("shadow"), getUserName().toLatin1().data());
+    m_F->launchDictionaryBruteForce();
+    time_t end = time(NULL);
 
     if (m_F->getFind() == true)
     {
@@ -122,8 +127,9 @@ void MainWindow::on_ConfirmButton_clicked()
         ui->textPassword->setText(m_F->getPassword());
     }
 
-    final=clock()-init;
-    this->secondes = (double)final / ((double)CLOCKS_PER_SEC);
+
+
+    this->secondes = (double)(end-start);
     ui->QLCDtimer->display(this->secondes);
 }
 
@@ -146,7 +152,8 @@ void MainWindow::SlotTick()
     if (this->secondes == 0)
     {
         QObject::connect(this->timer, SIGNAL(timeout()), this, SLOT(tick()));
-        m_F->lauchDictionaryBruteForce(m_F->getPasswordEncryptedByName(m_F->readShadowFile("shadow"), getUserName().toLatin1().data()));
+        m_F->getPasswordEncryptedByName(m_F->readShadowFile("shadow"), getUserName().toLatin1().data());
+        m_F->launchDictionaryBruteForce();
 
 
     }
@@ -164,8 +171,3 @@ void MainWindow::SlotStop()
 
    // delete timer;
 }
-
-
-
-
-

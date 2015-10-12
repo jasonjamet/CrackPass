@@ -19,12 +19,11 @@ private:
     bool m_find;
 
     void checkForce(int longueur, char begin, char end);
-    void bruteForce(int LongueurMax = 2);
+
 
     void checkForce(char *str, int index, int max);
-    bool encryptAndCompareDictionary(string passwordCandidate, crypt_data *data) const;
+    bool encryptAndCompareDictionary(string passwordCandidate) const;
     bool encryptAndCompare(char * passwordCandidate) const;
-    void lauchSimpleBruteForce(const char * passwordEncrypted, int maxLength);
 
 
 
@@ -34,7 +33,8 @@ public:
 
     map<string, string> readShadowFile(string shadowFileName);
     const char * getPasswordEncryptedByName(map<string, string> userAndPass, string userName);
-    void lauchDictionaryBruteForce(const char * passwordEncrypted);
+    void launchDictionaryBruteForce();
+    void launchSimpleBruteForce(int maxLength = 2);
     
 
     char * getPassword() const;
