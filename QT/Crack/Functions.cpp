@@ -45,26 +45,44 @@ const char *Functions::getPasswordEncryptedByName(map<string, string> userAndPas
 void Functions::launchSimpleBruteForce(int max) {
 
     char *buf = (char *) malloc(max + 1);
+    crypt_data localData;
 
-    for (int i = 1; i <= 2; ++i) {
-        memset(buf, 0, max + 1);
-        checkForce(buf, 0, i-1);
+    for (int i = 1; i <= max; ++i) {
+
+        if (!m_find) {
+            memset(buf, 0, max + 1);
+            checkForce(buf, 0, i - 1, localData);
+        } else {
+            break;
+        }
     }
 
     free(buf);
 }
 
-void Functions::checkForce(char * str, int index, int max) {
-    #pragma omp parallele for\
-    schedule(dynamic, 32)
+void Functions::checkForce(char * str, int index, int max, crypt_data localData) {
+
+    #pragma omp parallele for
     for (int i = 0; i < characters_size; ++i) {
-        str[index] = characters[i];
+        if(!m_find) {
+            localData.initialized = 0;
 
-        if (index < max)
-            checkForce(str, index + 1, max);
+            str[index] = characters[i];
 
-        cout << str << endl;
+            if (encryptAndCompareDictionary(str, localData)) {
+                cout << "TROUVE: " << str << endl;
+                m_password = (char *) malloc(strlen(str));
+                strcpy(m_password, str);
+                m_find = true;
+            }
+
+            if (index < max)
+                checkForce(str, index + 1, max, localData);
+        } else {
+            i = characters_size;
+        }
     }
+
 }
 
 void Functions::launchDictionaryBruteForce() {
