@@ -15,25 +15,26 @@ class Functions {
 
 private:
     const char *m_hash;
+    char * m_password;
     bool m_find;
 
     void checkForce(int longueur, char begin, char end);
-    void bruteForce(int LongueurMax);
+    void bruteForce(int LongueurMax = 2);
 
     void checkForce(char *str, int index, int max);
     bool encryptAndCompareDictionary(string passwordCandidate, crypt_data *data) const;
     bool encryptAndCompare(char * passwordCandidate) const;
     void lauchSimpleBruteForce(const char * passwordEncrypted, int maxLength);
-    void lauchDictionaryBruteForce(const char * passwordEncrypted);
+
 
 
 public:
     explicit Functions();
     ~Functions();
 
-    void decryptPassword(const char * passwordEncrypted, int maxLength = 2);
     map<string, string> readShadowFile(string shadowFileName);
     const char * getPasswordEncryptedByName(map<string, string> userAndPass, string userName);
+    void lauchDictionaryBruteForce(const char * passwordEncrypted);
     
 
     char * getPassword() const;

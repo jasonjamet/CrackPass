@@ -41,39 +41,6 @@ const char *Functions::getPasswordEncryptedByName(map<string, string> userAndPas
     }
 }
 
-void Functions::decryptPassword(const char *passwordEncrypted, int maxLength) {
-
-    data.initialized = 0;
-    if (passwordEncrypted != NULL) {
-        printf("Lancement de la recherche du mot de passe dans le fichier 'Database'\n");
-        if (readFile()) {
-            if (!m_find) {
-                printf("Le password n'a pas été trouvé dans le dictionnaire !\n");
-
-                printf("Lancement du bruteForce avec au maximum %d caractères !\n", maxLength);
-                bruteForce(maxLength);
-
-                if (m_find) {
-                    cout <<  "Mot de passe trouvé: " << m_password << endl;
-                }
-            } else {
-                cout <<  "Mot de passe trouvé: " << m_password << endl;
-            }
-        } else {
-            printf("Une erreur s'est produite lors de l'ouverture du fichier 'Database'\n");
-            printf("Lancement du bruteForce avec au maximum %d caractères !\n", maxLength);
-            bruteForce(maxLength);
-
-            if (m_find) {
-                cout <<  "Mot de passe trouvé: " << m_password << endl;
-            }
-        }
-    } else {
-        printf("Aucun mot de passe défini !\n");
-    }
-}
-
-
 void Functions::bruteForce(int LongueurMax) {
     for (int longueur=1; longueur <= LongueurMax; longueur++) {
         checkForce(longueur, 'a', 'z');
@@ -132,7 +99,7 @@ void Functions::lauchDictionaryBruteForce(const char * passwordEncrypted) {
         char * line = (char*) malloc(SIZE);
 
 
-#pragma omp parallel for private(data)
+        #pragma omp parallel for private(data)
         for (int i = 0; i < lSize; i++) {
             if(!m_find) {
                 data.initialized = 0;
