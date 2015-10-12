@@ -13,6 +13,7 @@ int main(int argc, char *argv[]) {
     //F->lauchSimpleBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"), 4);
     F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason");
     F->launchDictionaryBruteForce();
+    //F->launchSimpleBruteForce(4);
     delete (F);
     return 0;
 }
