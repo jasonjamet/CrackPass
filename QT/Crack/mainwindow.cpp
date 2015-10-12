@@ -67,7 +67,8 @@ void MainWindow::on_ConfirmButton_clicked()
 
     time_t start = time(NULL);
 
-    m_F->lauchDictionaryBruteForce(m_F->getPasswordEncryptedByName(m_F->readShadowFile("shadow"), getUserName().toLatin1().data()));
+    m_F->getPasswordEncryptedByName(m_F->readShadowFile("shadow"), getUserName().toLatin1().data());
+    m_F->launchDictionaryBruteForce();
     time_t end = time(NULL);
 
     if (m_F->getFind() == true)
@@ -103,7 +104,8 @@ void MainWindow::SlotTick()
     if (this->secondes == 0)
     {
         QObject::connect(this->timer, SIGNAL(timeout()), this, SLOT(tick()));
-        m_F->lauchDictionaryBruteForce(m_F->getPasswordEncryptedByName(m_F->readShadowFile("shadow"), getUserName().toLatin1().data()));
+        m_F->getPasswordEncryptedByName(m_F->readShadowFile("shadow"), getUserName().toLatin1().data());
+        m_F->launchDictionaryBruteForce();
 
 
     }
