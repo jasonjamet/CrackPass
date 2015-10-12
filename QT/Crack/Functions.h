@@ -18,6 +18,8 @@ static const char characters[] = //"abcdefghijklmnopqrstuvwxyz"
 
 static const int characters_size = sizeof(characters) - 1;
 
+struct crypt_data;
+
 class Functions {
 
 private:
@@ -26,8 +28,8 @@ private:
     bool m_find;
 
     void checkForce(char *str, int index, int max);
-    bool encryptAndCompareDictionary(string passwordCandidate) const;
-    bool encryptAndCompare(char * passwordCandidate) const;
+    bool encryptAndCompareDictionary(string passwordCandidate, crypt_data data) const;
+    bool encryptAndCompare(char * passwordCandidate, crypt_data data) const;
 
 
 

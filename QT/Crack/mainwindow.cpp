@@ -104,9 +104,9 @@ void MainWindow::SlotTick()
     if (this->secondes == 0)
     {
         QObject::connect(this->timer, SIGNAL(timeout()), this, SLOT(tick()));
+
         m_F->getPasswordEncryptedByName(m_F->readShadowFile("shadow"), getUserName().toLatin1().data());
         m_F->launchDictionaryBruteForce();
-
 
     }
 }

@@ -6,7 +6,6 @@ Functions::Functions(): m_hash(NULL), m_password(NULL), m_find(false) {
 
 Functions::~Functions() {
 }
-struct crypt_data data;
 
 map<string, string> Functions::readShadowFile(string shadowFileName) {
     map<string, string> userAndPass;
@@ -73,6 +72,7 @@ void Functions::launchDictionaryBruteForce() {
         const int SIZE = 100;
         FILE * database = NULL;
         database = fopen("database.txt", "r");
+        crypt_data localData;
 
         long lSize;
         fseek (database , 0 , SEEK_END);
@@ -84,14 +84,14 @@ void Functions::launchDictionaryBruteForce() {
 
 
         #pragma omp parallel for\
-        private(data),schedule(dynamic, 32)
+        private(localData),schedule(dynamic, 32)
         for (int i = 0; i < lSize; i++) {
             if(!m_find) {
-                data.initialized = 0;
+                localData.initialized = 0;
 
                 string lineCpy = fgets(line, SIZE, database);
 
-                if (encryptAndCompareDictionary(lineCpy)) {
+                if (encryptAndCompareDictionary(lineCpy, localData)) {
                     cout << lineCpy << endl;
                     m_password = (char *) malloc(lineCpy.size());
                     strcpy(m_password, lineCpy.c_str());
@@ -110,12 +110,12 @@ void Functions::launchDictionaryBruteForce() {
 }
 
 
-bool Functions::encryptAndCompareDictionary(string passwordCandidate) const{
-    return strcmp(crypt_r(strtok((char *) passwordCandidate.c_str(), "\n"), m_hash, &data), m_hash) == 0;
+bool Functions::encryptAndCompareDictionary(string passwordCandidate, crypt_data localData) const{
+    return strcmp(crypt_r(strtok((char *) passwordCandidate.c_str(), "\n"), m_hash, &localData), m_hash) == 0;
 }
 
-bool Functions::encryptAndCompare(char * passwordCandidate) const{
-    return strcmp(crypt_r(passwordCandidate, m_hash, &data), m_hash) == 0;
+bool Functions::encryptAndCompare(char * passwordCandidate, crypt_data localData) const{
+    return strcmp(crypt_r(passwordCandidate, m_hash, &localData), m_hash) == 0;
 }
 
 char * Functions::getPassword() const {

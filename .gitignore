@@ -58,3 +58,4 @@ makefile
 
 # QT
 /QT/build-Crack-Desktop-Debug/*
+/QT/Crack/Crack.pro.*
