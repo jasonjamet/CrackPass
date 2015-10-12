@@ -12,7 +12,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    m_f(new Functions())
 {
     QPalette palette;
     palette.setColor(QPalette::ButtonText,Qt::blue);
@@ -32,22 +33,20 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->QLCDtimer->display(secondes);
 
-    Functions *F = new Functions();
-    map<string, string> userAndPass = F->readShadowFile("../shadow");
+
+    map<string, string> userAndPass = m_f->readShadowFile("../shadow");
     for (map<string ,string>::iterator it=userAndPass.begin(); it!=userAndPass.end(); ++it) {
         ui->comboBox->addItem(it->first.c_str());
 
     }
 
-    delete (F);
+
 
     QObject::connect(ui->pushButton1, SIGNAL(clicked()),this, SLOT(SlotTick()));
     QObject::connect(ui->pushButton, SIGNAL(clicked()),this, SLOT(SlotStop()));
 
     //F->lauchSimpleBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"), 4);
-    //F->lauchDictionaryBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"));
 
-    delete (F);
 }
 
 MainWindow::~MainWindow()
@@ -68,6 +67,9 @@ void MainWindow::on_pushButton1_clicked()
       ui->label->setEnabled(false);
       ui->comboBox->setEnabled(false);
       ui->pushButton1->setEnabled(false);
+      ui->radioMPI->setEnabled(false);
+      ui->radioOMPI->setEnabled(false);
+      ui->radioOpenMP->setEnabled(false);
 
       this->secondes = 0;
       this->timer = new QTimer(this);
@@ -88,7 +90,10 @@ void MainWindow::tick()
 void MainWindow::SlotTick()
 {
     if (this->secondes == 0)
+    {
         QObject::connect(this->timer, SIGNAL(timeout()), this, SLOT(tick()));
+        m_f->lauchDictionaryBruteForce(m_f->getPasswordEncryptedByName(m_f->readShadowFile("shadow"), getUserName().toLatin1().data()));
+    }
 }
 
 void MainWindow::SlotStop()
@@ -96,6 +101,10 @@ void MainWindow::SlotStop()
     this->timer->stop();
     ui->comboBox->setEnabled(true);
     ui->pushButton1->setEnabled(true);
+    ui->radioMPI->setEnabled(true);
+    ui->radioOMPI->setEnabled(true);
+    ui->radioOpenMP->setEnabled(true);
+
 
     delete timer;
 }

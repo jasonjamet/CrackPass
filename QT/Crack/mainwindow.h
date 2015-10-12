@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "research.h"
 
+#include "Functions.h"
 
 namespace Ui {
 class MainWindow;
@@ -30,6 +31,8 @@ private:
 
     QTimer *timer;
     int secondes;
+
+    Functions *m_f;
 
 
 };
