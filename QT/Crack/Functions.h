@@ -32,7 +32,7 @@ private:
 
 
 public:
-    Functions();
+    explicit Functions();
     ~Functions();
 
     map<string, string> readShadowFile(string shadowFileName);

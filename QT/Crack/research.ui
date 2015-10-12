@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1071</width>
+    <height>669</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,24 +17,47 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>90</y>
-      <width>221</width>
+      <x>350</x>
+      <y>110</y>
+      <width>241</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>You can see your password here</string>
+     <string/>
     </property>
    </widget>
-   <widget class="QListWidget" name="listWidget">
+   <widget class="QListView" name="listView">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>180</y>
+      <x>30</x>
+      <y>230</y>
       <width>256</width>
       <height>192</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="lcdNumber">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>90</y>
+      <width>111</width>
+      <height>23</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>50</y>
+      <width>131</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Password found in :</string>
     </property>
    </widget>
   </widget>
@@ -43,7 +66,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1071</width>
      <height>21</height>
     </rect>
    </property>

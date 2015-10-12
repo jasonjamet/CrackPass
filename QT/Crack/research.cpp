@@ -1,7 +1,10 @@
 #include "research.h"
 #include "ui_research.h"
+#include "mainwindow.h"
 
-Research::Research(QWidget *parent) :
+#include "Functions.h"
+
+Research::Research(QString userName, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Research)
 {
@@ -9,9 +12,13 @@ Research::Research(QWidget *parent) :
 
     setWindowTitle("CrackPassword");
 
+    ui->label->setText("You can see the password's "+userName+ " here :");
+
 }
 
 Research::~Research()
 {
     delete ui;
 }
+
+

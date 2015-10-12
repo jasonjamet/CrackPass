@@ -6,19 +6,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>971</width>
+    <height>617</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(209, 209, 209);</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QComboBox" name="comboBox">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>90</y>
+      <x>330</x>
+      <y>110</y>
       <width>191</width>
       <height>23</height>
      </rect>
@@ -27,14 +30,15 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>20</y>
-      <width>261</width>
+      <x>310</x>
+      <y>60</y>
+      <width>371</width>
       <height>16</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 75 12pt &quot;GFS Artemisia&quot;;</string>
+     <string notr="true">font: 75 12pt &quot;GFS Artemisia&quot;;
+color: rgb(85, 170, 0);</string>
     </property>
     <property name="text">
      <string>Hello, please select an username</string>
@@ -43,18 +47,84 @@
    <widget class="QPushButton" name="pushButton1">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>170</y>
+      <x>590</x>
+      <y>110</y>
       <width>89</width>
       <height>27</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(0, 85, 127);
-font: 9pt &quot;Latin Modern Mono&quot;;</string>
+     <string notr="true">font: 12pt &quot;Latin Modern Mono&quot;;
+color: rgb(0, 170, 127);</string>
     </property>
     <property name="text">
      <string>Confirm</string>
+    </property>
+   </widget>
+   <widget class="QListView" name="listView">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>230</y>
+      <width>256</width>
+      <height>192</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="QLCDtimer">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>470</y>
+      <width>111</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(170, 170, 255);</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>430</y>
+      <width>131</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Password found in</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>240</y>
+      <width>151</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>870</x>
+      <y>30</y>
+      <width>51</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Stop</string>
     </property>
    </widget>
   </widget>
@@ -63,7 +133,7 @@ font: 9pt &quot;Latin Modern Mono&quot;;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>971</width>
      <height>21</height>
     </rect>
    </property>

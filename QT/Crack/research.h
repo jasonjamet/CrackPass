@@ -12,7 +12,7 @@ class Research : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit Research(QWidget *parent = 0);
+    explicit Research(QString userName, QWidget *parent = 0);
     ~Research();
 
 private:
