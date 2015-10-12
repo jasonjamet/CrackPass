@@ -18,10 +18,13 @@ map<string, string> Functions::readShadowFile(string shadowFileName) {
         string line;
         while (getline(shadowFileStream, line)) {
             char *token = strtok(strdup(line.c_str()), ":");
-            while (token != NULL) {
-                userAndPass[token] = strtok(NULL, ":");
-                token = strtok(NULL, ":");
+
+            char * userPass = strtok(NULL, ":");
+            if(strcmp(userPass, "*") != 0 && strcmp(userPass, "0") != 0 && strcmp(userPass, "7") != 0 && strcmp(userPass, "!") != 0) {
+                userAndPass[token] = userPass;
             }
+            strtok(NULL, ":");
+
         }
         shadowFileStream.close();
 
