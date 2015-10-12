@@ -39,11 +39,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     }
 
-
-   // QObject::connect(ui->ConfirmButton, SIGNAL(clicked()),this, SLOT(SlotTick()));
     QObject::connect(ui->StopButton, SIGNAL(clicked()),this, SLOT(SlotStop()));
-
-    //F->lauchSimpleBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"), 4);
+    QObject::connect(this, SIGNAL(SignalStopLoad()), this, SLOT(SlotStop()));
 
 
 }
@@ -125,6 +122,8 @@ void MainWindow::on_ConfirmButton_clicked()
         cout << "Mot de passe trouvé :" << m_F->getPassword() << endl;
 
         ui->textPassword->setText(m_F->getPassword());
+
+        emit SignalStopLoad();
     }
 
 

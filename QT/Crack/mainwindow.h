@@ -26,6 +26,9 @@ public slots:
     void SlotStop();
     void on_ConfirmButton_clicked();
 
+signals:
+    void SignalStopLoad();
+
 private:
     Ui::MainWindow *ui;
     Research *research;
