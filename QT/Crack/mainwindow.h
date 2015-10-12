@@ -35,7 +35,6 @@ private:
     Functions * m_F;
 
 
-
 };
 
 #endif // MAINWINDOW_H

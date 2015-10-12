@@ -71,6 +71,45 @@ void MainWindow::on_ConfirmButton_clicked()
     clock_t init, final;
     init=clock();
 
+    if(ui->checkDico->isChecked())
+    {
+        cout << "CheckDico checked" << endl;
+        if(ui->radioOMPI->isChecked())
+        {
+            cout << "Open / MPI Checked" << endl;
+        }
+
+        if(ui->radioMPI->isChecked())
+        {
+            cout << "MPI Checked" << endl;
+        }
+
+        if(ui->radioOpenMP->isChecked())
+        {
+            cout << "Openmp Checked" << endl;
+        }
+    }
+
+    if(ui->checkBrute->isChecked())
+    {
+        cout << "CheckBrute checked" << endl;
+        if(ui->radioOMPI->isChecked())
+        {
+            cout << "Open / MPI Checked" << endl;
+        }
+
+        if(ui->radioMPI->isChecked())
+        {
+            cout << "MPI Checked" << endl;
+        }
+
+        if(ui->radioOpenMP->isChecked())
+        {
+            cout << "Openmp Checked" << endl;
+        }
+    }
+
+
 
     m_F->lauchDictionaryBruteForce(m_F->getPasswordEncryptedByName(m_F->readShadowFile("shadow"), getUserName().toLatin1().data()));
 
