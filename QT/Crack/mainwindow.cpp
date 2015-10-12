@@ -65,7 +65,7 @@ void MainWindow::on_ConfirmButton_clicked()
     ui->radioOpenMP->setEnabled(false);
     ui->textPassword->setText("Searching password ...");
 
-<<<<<<< HEAD
+
     //this->secondes = 0;
     //this->timer = new QTimer(this);
     //this->timer->start(1000);
@@ -112,7 +112,7 @@ void MainWindow::on_ConfirmButton_clicked()
 
 
 
-    
+
     time_t start = time(NULL);
 
     m_F->getPasswordEncryptedByName(m_F->readShadowFile("shadow"), getUserName().toLatin1().data());
