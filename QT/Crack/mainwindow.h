@@ -5,6 +5,7 @@
 #include "research.h"
 
 #include "Functions.h"
+#include <time.h>
 
 namespace Ui {
 class MainWindow;
@@ -31,8 +32,8 @@ private:
 
     QTimer *timer;
     int secondes;
+    Functions * m_F;
 
-    Functions *m_f;
 
 
 };

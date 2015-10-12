@@ -7,13 +7,10 @@
 #include "QLCDNumber"
 #include "QMessageBox"
 
-#include "Functions.h"
-
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    m_f(new Functions())
+    m_F(new Functions())
 {
     QPalette palette;
     palette.setColor(QPalette::ButtonText,Qt::blue);
@@ -34,18 +31,19 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->QLCDtimer->display(secondes);
 
 
-    map<string, string> userAndPass = m_f->readShadowFile("../shadow");
+
+    map<string, string> userAndPass = m_F->readShadowFile("shadow");
     for (map<string ,string>::iterator it=userAndPass.begin(); it!=userAndPass.end(); ++it) {
         ui->comboBox->addItem(it->first.c_str());
 
     }
 
 
-
     QObject::connect(ui->pushButton1, SIGNAL(clicked()),this, SLOT(SlotTick()));
     QObject::connect(ui->pushButton, SIGNAL(clicked()),this, SLOT(SlotStop()));
 
     //F->lauchSimpleBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"), 4);
+
 
 }
 
@@ -71,11 +69,17 @@ void MainWindow::on_pushButton1_clicked()
       ui->radioOMPI->setEnabled(false);
       ui->radioOpenMP->setEnabled(false);
 
-      this->secondes = 0;
-      this->timer = new QTimer(this);
+      //this->secondes = 0;
+      //this->timer = new QTimer(this);
+      //this->timer->start(1000);
+      clock_t init, final;
+      init=clock();
 
-      this->timer->start(1000);
+      m_F->lauchDictionaryBruteForce(m_F->getPasswordEncryptedByName(m_F->readShadowFile("shadow"), getUserName().toLatin1().data()));
 
+      final=clock()-init;
+      this->secondes = (double)final / ((double)CLOCKS_PER_SEC);
+      ui->QLCDtimer->display(this->secondes);
 //    research = new Research(getUserName());
 //    research->show();
 }
@@ -92,7 +96,7 @@ void MainWindow::SlotTick()
     if (this->secondes == 0)
     {
         QObject::connect(this->timer, SIGNAL(timeout()), this, SLOT(tick()));
-        m_f->lauchDictionaryBruteForce(m_f->getPasswordEncryptedByName(m_f->readShadowFile("shadow"), getUserName().toLatin1().data()));
+        m_F->lauchDictionaryBruteForce(m_F->getPasswordEncryptedByName(m_F->readShadowFile("shadow"), getUserName().toLatin1().data()));
     }
 }
 

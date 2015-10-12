@@ -179,3 +179,7 @@ bool Functions::encryptAndCompare(char * passwordCandidate) const{
 char * Functions::getPassword() const {
     return m_password;
 }
+
+bool Functions::getFind() const {
+    return m_find;
+}
