@@ -6,7 +6,6 @@ Functions::Functions(): m_hash(NULL), m_password(NULL), m_find(false) {
 
 Functions::~Functions() {
 }
-
 struct crypt_data data;
 
 map<string, string> Functions::readShadowFile(string shadowFileName) {
