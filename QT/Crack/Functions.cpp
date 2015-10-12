@@ -20,7 +20,7 @@ map<string, string> Functions::readShadowFile(string shadowFileName) {
             char *token = strtok(strdup(line.c_str()), ":");
 
             char * userPass = strtok(NULL, ":");
-            if(strcmp(userPass, "*") != 0 && strcmp(userPass, "0") != 0 && strcmp(userPass, "7") != 0 && strcmp(userPass, "!") != 0) {
+            if(strcmp(userPass, "*") && strcmp(userPass, "!") != 0) {
                 userAndPass[token] = userPass;
             }
             strtok(NULL, ":");
