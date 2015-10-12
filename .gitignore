@@ -55,3 +55,6 @@ CMakeLists.txt
 #exe
 Prog
 makefile
+
+# QT
+/QT/build-Crack-Desktop-Debug/*

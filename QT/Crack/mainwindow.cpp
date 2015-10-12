@@ -38,12 +38,16 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->comboBox->addItem(it->first.c_str());
 
     }
-    //F->lauchSimpleBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("../shadow"), getUserName()), 4);
+
     delete (F);
 
     QObject::connect(ui->pushButton1, SIGNAL(clicked()),this, SLOT(SlotTick()));
     QObject::connect(ui->pushButton, SIGNAL(clicked()),this, SLOT(SlotStop()));
 
+    //F->lauchSimpleBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"), 4);
+    //F->lauchDictionaryBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"));
+
+    delete (F);
 }
 
 MainWindow::~MainWindow()
