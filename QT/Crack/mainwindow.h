@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "research.h"
+
 #include "Functions.h"
 #include <time.h>
 
@@ -20,10 +21,10 @@ public:
     QString getUserName();
 
 public slots:
-    void on_pushButton1_clicked();
     void SlotTick();
     void tick();
     void SlotStop();
+    void on_ConfirmButton_clicked();
 
 private:
     Ui::MainWindow *ui;
