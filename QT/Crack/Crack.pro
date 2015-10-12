@@ -14,10 +14,15 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    research.cpp
+    research.cpp \
+    Functions.cpp
 
 HEADERS  += mainwindow.h \
-    research.h
+    research.h \
+    Functions.h
 
 FORMS    += mainwindow.ui \
     research.ui
+
+OTHER_FILES += \
+    ../shadow

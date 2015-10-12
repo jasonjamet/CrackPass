@@ -1,4 +1,3 @@
-
 #include "Functions.h"
 
 Functions::Functions(): m_hash(NULL), m_password(NULL), m_find(false) {

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "research.h"
 
+
 namespace Ui {
 class MainWindow;
 }
@@ -15,13 +16,22 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    QString getUserName();
 
-private slots:
+public slots:
     void on_pushButton1_clicked();
+    void SlotTick();
+    void tick();
+    void SlotStop();
 
 private:
     Ui::MainWindow *ui;
     Research *research;
+
+    QTimer *timer;
+    int secondes;
+
+
 };
 
 #endif // MAINWINDOW_H

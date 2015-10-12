@@ -30,7 +30,7 @@ private:
     bool encryptAndCompare(const char * passwordCandidate) const;
 
 public:
-    Functions();
+    explicit Functions();
     ~Functions();
 
     map<string, string> readShadowFile(string shadowFileName);
