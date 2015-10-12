@@ -43,57 +43,29 @@ const char *Functions::getPasswordEncryptedByName(map<string, string> userAndPas
     }
 }
 
-void Functions::launchSimpleBruteForce(int LongueurMax) {
-    for (int longueur=1; longueur <= LongueurMax; longueur++) {
-        checkForce(longueur, 'a', 'z');
+void Functions::launchSimpleBruteForce(int max) {
+
+    char *buf = (char *) malloc(max + 1);
+
+    for (int i = 1; i <= 2; ++i) {
+        memset(buf, 0, max + 1);
+        checkForce(buf, 0, i-1);
     }
+
+    free(buf);
 }
 
+void Functions::checkForce(char * str, int index, int max) {
+    #pragma omp parallele for\
+    schedule(dynamic, 32)
+    for (int i = 0; i < characters_size; ++i) {
+        str[index] = characters[i];
 
-void Functions::checkForce(int longueur, char begin, char end) {
+        if (index < max)
+            checkForce(str, index + 1, max);
 
-    char code[255]; // tableau contenant le code
-    int i;
-
-    #pragma omp parallel for\
-    schedule(dynamic) default(shared)
-    for (int i=0; i < longueur; i++) {
-        code[i] = begin;
+        cout << str << endl;
     }
-
-    code[longueur] = 0;
-
-    //#pragma omp parallel
-
-    /*#pragma omp parallel for\
-    schedule(dynamic) default(shared)*/
-
-
-    //#pragma omp parallel
-    /*while(code[longueur-1] < end) {
-        if (!m_find) {
-            i = 0;
-            //#pragma omp parallel
-            while (code[i] > end && code[i + 1] != 0) {
-                code[i] = begin;
-                code[++i]++;
-
-                //cout << omp_get_thread_num() << endl;
-            }
-
-            data.initialized = 0;
-            if (encryptAndCompare(code)) {
-                cout << code << endl;
-                m_password = (char *) malloc(strlen(code));
-                strcpy(m_password, code);
-                m_find = true;
-            }
-
-            code[0]++;
-        } else {
-            code[longueur-1] = end;
-        }
-    }*/
 }
 
 void Functions::launchDictionaryBruteForce() {
@@ -101,7 +73,6 @@ void Functions::launchDictionaryBruteForce() {
         const int SIZE = 100;
         FILE * database = NULL;
         database = fopen("database.txt", "r");
-
 
         long lSize;
         fseek (database , 0 , SEEK_END);
@@ -112,7 +83,8 @@ void Functions::launchDictionaryBruteForce() {
         char * line = (char*) malloc(SIZE);
 
 
-        #pragma omp parallel for private(data)
+        #pragma omp parallel for\
+        private(data),schedule(dynamic, 32)
         for (int i = 0; i < lSize; i++) {
             if(!m_find) {
                 data.initialized = 0;

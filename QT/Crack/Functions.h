@@ -11,15 +11,19 @@
 
 using namespace std;
 
+static const char characters[] = //"abcdefghijklmnopqrstuvwxyz"
+        //"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "0123456789";
+//"&é~\"#'{([|-`è_\\^ç@à])}=+$¤£ù%*µ!§:/;.,?<>² ";
+
+static const int characters_size = sizeof(characters) - 1;
+
 class Functions {
 
 private:
     const char *m_hash;
     char * m_password;
     bool m_find;
-
-    void checkForce(int longueur, char begin, char end);
-
 
     void checkForce(char *str, int index, int max);
     bool encryptAndCompareDictionary(string passwordCandidate) const;
@@ -34,7 +38,7 @@ public:
     map<string, string> readShadowFile(string shadowFileName);
     const char * getPasswordEncryptedByName(map<string, string> userAndPass, string userName);
     void launchDictionaryBruteForce();
-    void launchSimpleBruteForce(int maxLength = 2);
+    void launchSimpleBruteForce(int max = 3);
     
 
     char * getPassword() const;
