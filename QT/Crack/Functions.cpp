@@ -101,7 +101,6 @@ void Functions::launchDictionaryBruteForce() {
         const int SIZE = 100;
         FILE * database = NULL;
         database = fopen("database.txt", "r");
-        struct crypt_data data;
 
 
         long lSize;
