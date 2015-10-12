@@ -1,9 +1,10 @@
-#ifndef MAINWINDOW_H$6$KzWGv3OY$1LNpaPmbH5GOD7D.iY54XDEBtR0c06uE4RQ6GLpiPfSPbKP2IFY6XtLeFybJnelQCqLF010Zdm3PTSUoistds0
+#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
 #include "research.h"
-
+#include "Functions.h"
+#include <time.h>
 
 namespace Ui {
 class MainWindow;
@@ -30,6 +31,8 @@ private:
 
     QTimer *timer;
     int secondes;
+    Functions * m_F;
+
 
 
 };

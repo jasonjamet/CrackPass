@@ -43,6 +43,8 @@ public:
     void bruteForce(int max = 4);
 
     char * getPassword() const;
+    bool getFind() const;
+
 };
 
 

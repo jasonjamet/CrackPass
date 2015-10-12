@@ -7,12 +7,10 @@
 #include "QLCDNumber"
 #include "QMessageBox"
 
-#include "Functions.h"
-
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    m_F(new Functions())
 {
     QPalette palette;
     palette.setColor(QPalette::ButtonText,Qt::blue);
@@ -32,22 +30,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->QLCDtimer->display(secondes);
 
-    Functions *F = new Functions();
-    map<string, string> userAndPass = F->readShadowFile("../shadow");
+
+    map<string, string> userAndPass = m_F->readShadowFile("shadow");
     for (map<string ,string>::iterator it=userAndPass.begin(); it!=userAndPass.end(); ++it) {
         ui->comboBox->addItem(it->first.c_str());
 
     }
 
-    delete (F);
-
     QObject::connect(ui->pushButton1, SIGNAL(clicked()),this, SLOT(SlotTick()));
     QObject::connect(ui->pushButton, SIGNAL(clicked()),this, SLOT(SlotStop()));
 
     //F->lauchSimpleBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"), 4);
-    F->lauchDictionaryBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"));
+    //
 
-    delete (F);
 }
 
 MainWindow::~MainWindow()
@@ -69,11 +64,17 @@ void MainWindow::on_pushButton1_clicked()
       ui->comboBox->setEnabled(false);
       ui->pushButton1->setEnabled(false);
 
-      this->secondes = 0;
-      this->timer = new QTimer(this);
+      //this->secondes = 0;
+      //this->timer = new QTimer(this);
+      //this->timer->start(1000);
+      clock_t init, final;
+      init=clock();
 
-      this->timer->start(1000);
+      m_F->lauchDictionaryBruteForce(m_F->getPasswordEncryptedByName(m_F->readShadowFile("shadow"), getUserName().toLatin1().data()));
 
+      final=clock()-init;
+      this->secondes = (double)final / ((double)CLOCKS_PER_SEC);
+      ui->QLCDtimer->display(this->secondes);
 //    research = new Research(getUserName());
 //    research->show();
 }
@@ -87,8 +88,9 @@ void MainWindow::tick()
 
 void MainWindow::SlotTick()
 {
-    if (this->secondes == 0)
+    if (this->secondes == 0) {
         QObject::connect(this->timer, SIGNAL(timeout()), this, SLOT(tick()));
+    }
 }
 
 void MainWindow::SlotStop()
