@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->comboBox->addItem(it->first.c_str());
     }
     //F->lauchSimpleBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"), 4);
-    //F->lauchDictionaryBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"));
+    F->lauchDictionaryBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"));
 
     delete (F);
 }
