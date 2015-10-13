@@ -27,11 +27,13 @@ private:
     char * m_password;
     bool m_find;
 
+    void checkForce(char *str, int index, int max, crypt_data localData);
     bool encryptAndCompareDictionary(string passwordCandidate, crypt_data data) const;
     bool encryptAndCompare(char * passwordCandidate, crypt_data data) const;
 
     void bruteSequential(char x, int maxLen);
     void bruteImpl(char* str, int index, int maxDepth, crypt_data localData);
+
 
 public:
     explicit Functions();
@@ -41,7 +43,7 @@ public:
     const char * getPasswordEncryptedByName(map<string, string> userAndPass, string userName);
 
     void launchDictionaryBruteForce();
-    void launchSimpleBruteForce(int max = 2);
+    void launchSimpleBruteForce(int max = 5);
     
 
     char * getPassword() const;

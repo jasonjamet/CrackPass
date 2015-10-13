@@ -16,10 +16,14 @@ map<string, string> Functions::readShadowFile(string shadowFileName) {
         string line;
         while (getline(shadowFileStream, line)) {
             char *token = strtok(strdup(line.c_str()), ":");
-
-            char * userPass = strtok(NULL, ":");
-            if(strcmp(userPass, "*") && strcmp(userPass, "!") != 0) {
-                userAndPass[token] = userPass;
+            if(token != NULL) {
+                char * userPass = strtok(NULL, ":");
+                if(userPass != NULL) {
+                    if(strcmp(userPass, "*") && strcmp(userPass, "!") != 0) {
+                        userAndPass[token] = userPass;
+                    }
+                    strtok(NULL, ":");
+                }
             }
             strtok(NULL, ":");
 
@@ -85,7 +89,7 @@ void Functions::bruteSequential(char x, int maxLen) {
 }
 
 void Functions::launchSimpleBruteForce(int max) {
-    #pragma omp parallel for
+#pragma omp parallel for
     for (int k = 0; k < characters_size; k++) {
         if (!m_find) {
             bruteSequential(characters[k], max);
