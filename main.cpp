@@ -10,7 +10,7 @@ static const char alphabet[] =
         "0123456789";
 static const int alphabetSize = sizeof(alphabet) - 1;
 
-char * m_hash =  "$1$KzWGv3OY$FWeFFwavRyYRPPJlnQY1h0";
+char * m_hash =  "$1$KzWGv3OY$SYOrFT3pq570C8snr6.XN/";
 
 bool encryptAndCompare(char * passwordCandidate, crypt_data data ) {
     return strcmp(crypt_r(passwordCandidate, m_hash, &data), m_hash) == 0;
@@ -20,7 +20,13 @@ void bruteImpl(char* str, int index, int maxDepth, crypt_data localData) {
     for (int i = 0; i < alphabetSize; ++i) {
         str[index] = alphabet[i];
         if (index == maxDepth - 1) {
-            encryptAndCompare(str, localData);
+            if(str[0] == 'j' && str[1] == 'd') {
+                //cout << str << endl;
+            }
+            if(encryptAndCompare(str, localData)) {
+                cout << "trouve " <<  str << endl;
+            }
+
         }
         else {
             bruteImpl(str, index + 1, maxDepth, localData);
@@ -56,12 +62,12 @@ int main(int argc, char *argv[]) {
 
     Functions *F = new Functions();
     //F->lauchSimpleBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"), 4);
-    //F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason");
-    //F->launchDictionaryBruteForce();
+    F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason");
+    F->launchDictionaryBruteForce();
     //F->launchSimpleBruteForce(3);
     delete (F);
 
-    launchParallelBF(6);
+    //launchParallelBF(3);
 
 
 
