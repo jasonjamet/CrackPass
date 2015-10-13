@@ -53,11 +53,8 @@ void Functions::bruteImpl(char* str, int index, int maxDepth, crypt_data localDa
 
         str[index] = characters[i];
         if (index == maxDepth - 1) {
-
-            cout << str << endl;
            if (encryptAndCompare(str, localData)) {
                 m_find = true;
-
                 cout << "TROUVE: " << str << endl;
                 m_password = (char *) malloc(strlen(str));
                 strcpy(m_password, str);
@@ -89,7 +86,7 @@ void Functions::bruteSequential(char x, int maxLen) {
 }
 
 void Functions::launchSimpleBruteForce(int max) {
-#pragma omp parallel for
+    #pragma omp parallel for
     for (int k = 0; k < characters_size; k++) {
         if (!m_find) {
             bruteSequential(characters[k], max);

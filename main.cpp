@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
     Functions *F = new Functions();
     F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason");
     //F->launchDictionaryBruteForce();
-    F->launchSimpleBruteForce(3);
+    F->launchSimpleBruteForce(5);
     delete (F);
 
 
