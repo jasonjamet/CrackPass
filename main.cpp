@@ -4,18 +4,43 @@
 
 #include "QT/Crack/Functions.h"
 
+long GetFileSize(string name)
+{
+    std::ifstream fichier (name);
+    int count = 0;
+    while ( !fichier.eof() )
+    {
+        string line;
+        fichier >> line;
+        ++count;
+    }
 
+    fichier.close();
+    return count;
+}
 
 int main(int argc, char *argv[]) {
 
 
-    Functions *F = new Functions();
-    F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason");
-    //F->launchDictionaryBruteForce();
-    F->launchSimpleBruteForce(5);
-    delete (F);
+    std::ifstream fichier ("database.txt");
+
+    long taille = GetFileSize("database.txt");
+
+    string tab[taille];
+
+    if (fichier)
+    {
+        std::string ligne;
+        int i  = 0;
+        while (std::getline(fichier, ligne)) {
+            tab[i++] = ligne;
+        }
+    } else {
+        cout << "ERROR" << endl;
+    }
 
 
-    return 0;
+    for (int i = 0; i < taille; i++){
+        cout << tab[i] << endl;
+    }
 }
-
