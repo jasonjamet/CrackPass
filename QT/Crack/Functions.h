@@ -11,9 +11,9 @@
 
 using namespace std;
 
-static const char characters[] = "abcdefghijklmnopqrstuvwxyz"
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        "0123456789";
+static const char characters[] = "abcdefghijklmnopqrstuvwxyz";
+        //"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        //"0123456789";
 //"&é~\"#'{([|-`è_\\^ç@à])}=+$¤£ù%*µ!§:/;.,?<>² ";
 
 static const int characters_size = sizeof(characters) - 1;
@@ -27,11 +27,11 @@ private:
     char * m_password;
     bool m_find;
 
-    void checkForce(char *str, int index, int max, crypt_data localData);
     bool encryptAndCompareDictionary(string passwordCandidate, crypt_data data) const;
     bool encryptAndCompare(char * passwordCandidate, crypt_data data) const;
 
-
+    void bruteSequential(char x, int maxLen);
+    void bruteImpl(char* str, int index, int maxDepth, crypt_data localData);
 
 public:
     explicit Functions();
@@ -39,12 +39,15 @@ public:
 
     map<string, string> readShadowFile(string shadowFileName);
     const char * getPasswordEncryptedByName(map<string, string> userAndPass, string userName);
+
     void launchDictionaryBruteForce();
-    void launchSimpleBruteForce(int max = 5);
+    void launchSimpleBruteForce(int max = 2);
     
 
     char * getPassword() const;
     bool getFind() const;
+
+
 };
 
 #endif //CRACKPASS_FUNCTIONS_H
