@@ -99,38 +99,23 @@ void Functions::launchSimpleBruteForce(int max) {
 
 void Functions::launchDictionaryBruteForce() {
     if(m_hash != NULL) {
-        const int SIZE = 100;
-        FILE * database = NULL;
-        database = fopen("database.txt", "r");
-        crypt_data localData;
+        
 
-        long lSize;
-        fseek (database , 0 , SEEK_END);
-        lSize = ftell (database);
-        rewind (database);
-        cout << lSize << endl;
-
-        char * line = (char*) malloc(SIZE);
-
-
-        #pragma omp parallel for\
-        private(localData),schedule(dynamic, 32)
+        /*#pragma omp parallel for private(localData)
         for (int i = 0; i < lSize; i++) {
             if(!m_find) {
                 localData.initialized = 0;
 
-                string lineCpy = fgets(line, SIZE, database);
-                if (encryptAndCompareDictionary(lineCpy, localData)) {
-                    m_password = (char *) malloc(lineCpy.size());
-                    strcpy(m_password, lineCpy.c_str());
+                if (encryptAndCompareDictionary(databaseArray[i], localData)) {
+                    m_password = (char *) malloc(SIZE);
+                    strcpy(m_password, databaseArray[i]);
                     i = lSize;
                     m_find = true;
                 }
             } else {
                 i = lSize;
             }
-        }
-        fclose(database);
+        }*/
 
     } else {
         cerr << "Error password not found" << endl;
@@ -139,10 +124,12 @@ void Functions::launchDictionaryBruteForce() {
 
 
 bool Functions::encryptAndCompareDictionary(string passwordCandidate, crypt_data localData) const{
-    if(strcmp(passwordCandidate.c_str(), "\n") > 0) {
-        passwordCandidate.erase(passwordCandidate.size()-2);
+    if(passwordCandidate.c_str()[passwordCandidate.size()-1] == '\n') {
+        passwordCandidate.erase(passwordCandidate.size()-1);
+        cout << passwordCandidate << endl;
         return strcmp(crypt_r(passwordCandidate.c_str(), m_hash, &localData), m_hash) == 0;
     } else {
+        cout << "ENNNNNDDD" << passwordCandidate << endl;
         return strcmp(crypt_r(passwordCandidate.c_str(), m_hash, &localData), m_hash) == 0;
     }
 }
