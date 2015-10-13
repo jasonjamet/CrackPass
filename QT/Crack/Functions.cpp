@@ -39,6 +39,7 @@ map<string, string> Functions::readShadowFile(string shadowFileName) {
 const char *Functions::getPasswordEncryptedByName(map<string, string> userAndPass, string userName) {
     if (!userAndPass.empty() && userAndPass.count(userName) == 1) {
         m_hash = userAndPass[userName].c_str();
+        //cout << m_hash << endl;
         return m_hash;
     } else {
         cerr << "Error name not found, or multiple name" << endl;
@@ -119,7 +120,6 @@ void Functions::launchDictionaryBruteForce() {
                 localData.initialized = 0;
 
                 string lineCpy = fgets(line, SIZE, database);
-
                 if (encryptAndCompareDictionary(lineCpy, localData)) {
                     m_password = (char *) malloc(lineCpy.size());
                     strcpy(m_password, lineCpy.c_str());
@@ -139,7 +139,12 @@ void Functions::launchDictionaryBruteForce() {
 
 
 bool Functions::encryptAndCompareDictionary(string passwordCandidate, crypt_data localData) const{
-    return strcmp(crypt_r(strtok((char *) passwordCandidate.c_str(), "\n"), m_hash, &localData), m_hash) == 0;
+    if(strcmp(passwordCandidate.c_str(), "\n") > 0) {
+        passwordCandidate.erase(passwordCandidate.size()-2);
+        return strcmp(crypt_r(passwordCandidate.c_str(), m_hash, &localData), m_hash) == 0;
+    } else {
+        return strcmp(crypt_r(passwordCandidate.c_str(), m_hash, &localData), m_hash) == 0;
+    }
 }
 
 bool Functions::encryptAndCompare(char * passwordCandidate, crypt_data localData) const{
