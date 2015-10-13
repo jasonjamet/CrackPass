@@ -25,6 +25,8 @@ map<string, string> Functions::readShadowFile(string shadowFileName) {
                     strtok(NULL, ":");
                 }
             }
+            strtok(NULL, ":");
+
         }
         shadowFileStream.close();
 
@@ -45,47 +47,54 @@ const char *Functions::getPasswordEncryptedByName(map<string, string> userAndPas
     }
 }
 
-void Functions::launchSimpleBruteForce(int max) {
 
-    char *buf = (char *) malloc(max + 1);
+void Functions::bruteImpl(char* str, int index, int maxDepth, crypt_data localData) {
+    for (int i = 0; i < characters_size; ++i) {
+        localData.initialized = 0;
+
+        str[index] = characters[i];
+        if (index == maxDepth - 1) {
+           if (encryptAndCompare(str, localData)) {
+                m_find = true;
+                cout << "TROUVE: " << str << endl;
+                m_password = (char *) malloc(strlen(str));
+                strcpy(m_password, str);
+                i = characters_size;
+            }
+        }
+        else {
+            bruteImpl(str, index + 1, maxDepth, localData);
+        }
+    }
+}
+
+void Functions::bruteSequential(char x, int maxLen) {
     crypt_data localData;
+    char* buf = (char *) malloc(maxLen + 1);
 
-    for (int i = 1; i <= max; ++i) {
-
+    buf[0] = x;
+    #pragma omp parallel for private(localData)
+    for (int i = 2; i <= maxLen; ++i) {
         if (!m_find) {
-            memset(buf, 0, max + 1);
-            checkForce(buf, 0, i - 1, localData);
+            buf[i]='\0';
+            bruteImpl(buf, 1, i, localData);
         } else {
-            break;
+            i = maxLen+1;
         }
     }
 
     free(buf);
 }
 
-void Functions::checkForce(char * str, int index, int max, crypt_data localData) {
-
+void Functions::launchSimpleBruteForce(int max) {
     #pragma omp parallel for
-    for (int i = 0; i < characters_size; ++i) {
-        if(!m_find) {
-            localData.initialized = 0;
-
-            str[index] = characters[i];
-
-            if (encryptAndCompareDictionary(str, localData)) {
-                cout << "TROUVE: " << str << endl;
-                m_password = (char *) malloc(strlen(str));
-                strcpy(m_password, str);
-                m_find = true;
-            }
-
-            if (index < max)
-                checkForce(str, index + 1, max, localData);
+    for (int k = 0; k < characters_size; k++) {
+        if (!m_find) {
+            bruteSequential(characters[k], max);
         } else {
-            i = characters_size;
+            k = characters_size;
         }
     }
-
 }
 
 void Functions::launchDictionaryBruteForce() {
@@ -112,7 +121,6 @@ void Functions::launchDictionaryBruteForce() {
 
                 string lineCpy = fgets(line, SIZE, database);
                 if (encryptAndCompareDictionary(lineCpy, localData)) {
-                    cout << lineCpy << endl;
                     m_password = (char *) malloc(lineCpy.size());
                     strcpy(m_password, lineCpy.c_str());
                     i = lSize;
@@ -133,7 +141,6 @@ void Functions::launchDictionaryBruteForce() {
 bool Functions::encryptAndCompareDictionary(string passwordCandidate, crypt_data localData) const{
     if(strcmp(passwordCandidate.c_str(), "\n") > 0) {
         passwordCandidate.erase(passwordCandidate.size()-2);
-        cout << passwordCandidate << endl;
         return strcmp(crypt_r(passwordCandidate.c_str(), m_hash, &localData), m_hash) == 0;
     } else {
         return strcmp(crypt_r(passwordCandidate.c_str(), m_hash, &localData), m_hash) == 0;

@@ -70,7 +70,6 @@ int main(int argc, char *argv[]) {
     //launchParallelBF(3);
 
 
-
     return 0;
 }
 
