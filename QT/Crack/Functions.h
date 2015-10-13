@@ -41,6 +41,7 @@ public:
 
     char * getPassword() const;
     bool getFind() const;
+    void initialize();
 };
 
 #endif //CRACKPASS_FUNCTIONS_H
