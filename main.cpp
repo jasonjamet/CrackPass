@@ -55,17 +55,10 @@ int main(int argc, char *argv[]) {
 
 
     Functions *F = new Functions();
-<<<<<<< HEAD
     //F->lauchSimpleBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"), 4);
     //F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason");
     //F->launchDictionaryBruteForce();
     //F->launchSimpleBruteForce(3);
-=======
-
-    F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason");
-    F->launchSimpleBruteForce();
-    //F->launchDictionaryBruteForce();
->>>>>>> bb79708300281d3bbecef5a932f18d4668990fa1
     delete (F);
 
     launchParallelBF(6);
