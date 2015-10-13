@@ -41,7 +41,7 @@ public:
     const char * getPasswordEncryptedByName(map<string, string> userAndPass, string userName);
     void launchDictionaryBruteForce();
     void launchSimpleBruteForce(int max = 5);
-    
+
 
     char * getPassword() const;
     bool getFind() const;
