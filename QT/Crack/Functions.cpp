@@ -7,8 +7,6 @@ Functions::Functions(): m_hash(NULL), m_password(NULL), m_find(false) {
 Functions::~Functions() {
 }
 
-struct crypt_data data;
-
 map<string, string> Functions::readShadowFile(string shadowFileName) {
     map<string, string> userAndPass;
 
@@ -18,10 +16,14 @@ map<string, string> Functions::readShadowFile(string shadowFileName) {
         string line;
         while (getline(shadowFileStream, line)) {
             char *token = strtok(strdup(line.c_str()), ":");
-
-            char * userPass = strtok(NULL, ":");
-            if(strcmp(userPass, "*") && strcmp(userPass, "!") != 0) {
-                userAndPass[token] = userPass;
+            if(token != NULL) {
+                char * userPass = strtok(NULL, ":");
+                if(userPass != NULL) {
+                    if(strcmp(userPass, "*") && strcmp(userPass, "!") != 0) {
+                        userAndPass[token] = userPass;
+                    }
+                    strtok(NULL, ":");
+                }
             }
             strtok(NULL, ":");
 
@@ -44,56 +46,56 @@ const char *Functions::getPasswordEncryptedByName(map<string, string> userAndPas
     }
 }
 
-void Functions::launchSimpleBruteForce(int LongueurMax) {
-    for (int longueur=1; longueur <= LongueurMax; longueur++) {
-        checkForce(longueur, 'a', 'z');
+
+void Functions::bruteImpl(char* str, int index, int maxDepth, crypt_data localData) {
+    for (int i = 0; i < characters_size; ++i) {
+        localData.initialized = 0;
+
+        str[index] = characters[i];
+        if (index == maxDepth - 1) {
+
+            cout << str << endl;
+           if (encryptAndCompare(str, localData)) {
+                m_find = true;
+
+                cout << "TROUVE: " << str << endl;
+                m_password = (char *) malloc(strlen(str));
+                strcpy(m_password, str);
+                i = characters_size;
+            }
+        }
+        else {
+            bruteImpl(str, index + 1, maxDepth, localData);
+        }
     }
 }
 
+void Functions::bruteSequential(char x, int maxLen) {
+    crypt_data localData;
+    char* buf = (char *) malloc(maxLen + 1);
 
-void Functions::checkForce(int longueur, char begin, char end) {
-
-    char code[255]; // tableau contenant le code
-    int i;
-
-    #pragma omp parallel for\
-    schedule(dynamic) default(shared)
-    for (int i=0; i < longueur; i++) {
-        code[i] = begin;
+    buf[0] = x;
+    #pragma omp parallel for private(localData)
+    for (int i = 2; i <= maxLen; ++i) {
+        if (!m_find) {
+            buf[i]='\0';
+            bruteImpl(buf, 1, i, localData);
+        } else {
+            i = maxLen+1;
+        }
     }
 
-    code[longueur] = 0;
+    free(buf);
+}
 
-    //#pragma omp parallel
-
-    /*#pragma omp parallel for\
-    schedule(dynamic) default(shared)*/
-
-
-    #pragma omp parallel
-    while(code[longueur-1] < end) {
-       /* if (!m_find) {
-            i = 0;
-            //#pragma omp parallel
-            while (code[i] > end && code[i + 1] != 0) {
-                code[i] = begin;
-                code[++i]++;
-
-                //cout << omp_get_thread_num() << endl;
-            }
-
-            data.initialized = 0;
-            if (encryptAndCompare(code)) {
-                cout << code << endl;
-                m_password = (char *) malloc(strlen(code));
-                strcpy(m_password, code);
-                m_find = true;
-            }
-
-            code[0]++;
+void Functions::launchSimpleBruteForce(int max) {
+#pragma omp parallel for
+    for (int k = 0; k < characters_size; k++) {
+        if (!m_find) {
+            bruteSequential(characters[k], max);
         } else {
-            code[longueur-1] = end;
-        }*/
+            k = characters_size;
+        }
     }
 }
 
@@ -104,7 +106,6 @@ void Functions::launchDictionaryBruteForce() {
         database = fopen("database.txt", "r");
         crypt_data localData;
 
-
         long lSize;
         fseek (database , 0 , SEEK_END);
         lSize = ftell (database);
@@ -114,15 +115,15 @@ void Functions::launchDictionaryBruteForce() {
         char * line = (char*) malloc(SIZE);
 
 
-        #pragma omp parallel for private(localData)
+        #pragma omp parallel for\
+        private(localData),schedule(dynamic, 32)
         for (int i = 0; i < lSize; i++) {
             if(!m_find) {
-                data.initialized = 0;
+                localData.initialized = 0;
 
                 string lineCpy = fgets(line, SIZE, database);
 
                 if (encryptAndCompareDictionary(lineCpy, localData)) {
-                    cout << lineCpy << endl;
                     m_password = (char *) malloc(lineCpy.size());
                     strcpy(m_password, lineCpy.c_str());
                     i = lSize;
@@ -144,8 +145,8 @@ bool Functions::encryptAndCompareDictionary(string passwordCandidate, crypt_data
     return strcmp(crypt_r(strtok((char *) passwordCandidate.c_str(), "\n"), m_hash, &localData), m_hash) == 0;
 }
 
-bool Functions::encryptAndCompare(char * passwordCandidate) const{
-    return strcmp(crypt_r(passwordCandidate, m_hash, &data), m_hash) == 0;
+bool Functions::encryptAndCompare(char * passwordCandidate, crypt_data localData) const{
+    return strcmp(crypt_r(passwordCandidate, m_hash, &localData), m_hash) == 0;
 }
 
 char * Functions::getPassword() const {
@@ -160,4 +161,5 @@ void Functions::initialize()
 {
     m_hash = NULL;
     m_find = false;
+}
 }

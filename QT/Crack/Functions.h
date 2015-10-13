@@ -11,6 +11,13 @@
 
 using namespace std;
 
+static const char characters[] = "abcdefghijklmnopqrstuvwxyz";
+        //"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        //"0123456789";
+//"&é~\"#'{([|-`è_\\^ç@à])}=+$¤£ù%*µ!§:/;.,?<>² ";
+
+static const int characters_size = sizeof(characters) - 1;
+
 struct crypt_data;
 
 class Functions {
@@ -20,13 +27,12 @@ private:
     char * m_password;
     bool m_find;
 
-    void checkForce(int longueur, char begin, char end);
-
-
-    void checkForce(char *str, int index, int max);
+    void checkForce(char *str, int index, int max, crypt_data localData);
     bool encryptAndCompareDictionary(string passwordCandidate, crypt_data data) const;
-    bool encryptAndCompare(char * passwordCandidate) const;
+    bool encryptAndCompare(char * passwordCandidate, crypt_data data) const;
 
+    void bruteSequential(char x, int maxLen);
+    void bruteImpl(char* str, int index, int maxDepth, crypt_data localData);
 
 
 public:
@@ -35,8 +41,9 @@ public:
 
     map<string, string> readShadowFile(string shadowFileName);
     const char * getPasswordEncryptedByName(map<string, string> userAndPass, string userName);
+
     void launchDictionaryBruteForce();
-    void launchSimpleBruteForce(int maxLength = 2);
+    void launchSimpleBruteForce(int max = 5);
     
 
     char * getPassword() const;
