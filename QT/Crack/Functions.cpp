@@ -72,28 +72,28 @@ void Functions::checkForce(int longueur, char begin, char end) {
 
     #pragma omp parallel
     while(code[longueur-1] < end) {
-       /* if (!m_find) {
+       if (!m_find) {
             i = 0;
             //#pragma omp parallel
             while (code[i] > end && code[i + 1] != 0) {
                 code[i] = begin;
                 code[++i]++;
 
-                //cout << omp_get_thread_num() << endl;
+               // cout << omp_get_thread_num() << endl;
             }
 
             data.initialized = 0;
             if (encryptAndCompare(code)) {
-                cout << code << endl;
+                cout << " TROUVE " << code << endl;
                 m_password = (char *) malloc(strlen(code));
                 strcpy(m_password, code);
                 m_find = true;
             }
-
+            cout << code << endl;
             code[0]++;
         } else {
             code[longueur-1] = end;
-        }*/
+        }
     }
 }
 
