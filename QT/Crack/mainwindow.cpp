@@ -66,59 +66,61 @@ void MainWindow::on_ConfirmButton_clicked()
     ui->textPassword->setText("Searching password ...");
 
 
-    //this->secondes = 0;
-    //this->timer = new QTimer(this);
-    //this->timer->start(1000);
-    clock_t init, final;
+    clock_t init;
     init=clock();
-
-    if(ui->checkDico->isChecked() && !ui->checkBrute->isChecked())
-    {
-        cout << "CheckDico checked && checkBrute not checked" << endl;
-//        if(ui->radioOMPI->isChecked())
-//        {
-//            cout << "Open / MPI Checked" << endl;
-//        }
-
-//        if(ui->radioMPI->isChecked())
-//        {
-//            cout << "MPI Checked" << endl;
-//        }
-
-//        if(ui->radioOpenMP->isChecked())
-//        {
-//            cout << "Openmp Checked" << endl;
-//        }
-    }
-
-    if(ui->checkBrute->isChecked() && !ui->checkDico->isChecked())
-    {
-        cout << "CheckBrute checked && checkDico not checked" << endl;
-//        if(ui->radioOMPI->isChecked())
-//        {
-//            cout << "Open / MPI Checked" << endl;
-//        }
-
-//        if(ui->radioMPI->isChecked())
-//        {
-//            cout << "MPI Checked" << endl;
-//        }
-
-//        if(ui->radioOpenMP->isChecked())
-//        {
-//            cout << "Openmp Checked" << endl;
-//        }
-    }
-
-    if(ui->checkBrute->isChecked() && ui->checkDico->isChecked())
-    {
-        cout << "CheckBrute checked && checkDico checked" << endl;
-    }
 
     time_t start = time(NULL);
 
     m_F->getPasswordEncryptedByName(m_F->readShadowFile("shadow"), getUserName().toLatin1().data());
-    m_F->launchDictionaryBruteForce();
+
+    if(ui->checkDico->isChecked() && !ui->checkBrute->isChecked())
+    {
+        cout << "CheckDico checked && checkBrute not checked" << endl;
+        if(ui->radioOMPI->isChecked())
+        {
+            cout << "Open / MPI Checked" << endl;
+        }
+
+        if(ui->radioMPI->isChecked())
+        {
+            cout << "MPI Checked" << endl;
+        }
+
+        if(ui->radioOpenMP->isChecked())
+        {
+            cout << "Openmp Checked" << endl;
+            m_F->launchDictionaryBruteForce();
+        }
+    }
+    else if(ui->checkBrute->isChecked() && !ui->checkDico->isChecked())
+    {
+        cout << "CheckBrute checked && checkDico not checked" << endl;
+        if(ui->radioOMPI->isChecked())
+        {
+            cout << "Open / MPI Checked" << endl;
+        }
+
+        if(ui->radioMPI->isChecked())
+        {
+            cout << "MPI Checked" << endl;
+        }
+
+        if(ui->radioOpenMP->isChecked())
+        {
+            cout << "Openmp Checked" << endl;
+            m_F->launchSimpleBruteForce();
+        }
+    }
+    else if(ui->checkBrute->isChecked() && ui->checkDico->isChecked())
+    {
+        cout << "CheckBrute checked && checkDico checked" << endl;
+    }
+    else
+    {
+        m_F->launchDictionaryBruteForce();
+    }
+
+
     time_t end = time(NULL);
 
     if (m_F->getFind() == true)

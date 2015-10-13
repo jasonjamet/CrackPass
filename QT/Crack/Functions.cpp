@@ -162,4 +162,3 @@ void Functions::initialize()
     m_hash = NULL;
     m_find = false;
 }
-}

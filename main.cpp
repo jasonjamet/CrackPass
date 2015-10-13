@@ -11,8 +11,8 @@ int main(int argc, char *argv[]) {
 
     Functions *F = new Functions();
     F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason");
-    //F->launchDictionaryBruteForce();
-    F->launchSimpleBruteForce(3);
+    F->launchDictionaryBruteForce();
+    //F->launchSimpleBruteForce(3);
     delete (F);
 
 

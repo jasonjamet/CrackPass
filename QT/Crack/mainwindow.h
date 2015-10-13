@@ -18,7 +18,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-     getUserName();
+     QString getUserName();
 
 public slots:
     void SlotTick();
