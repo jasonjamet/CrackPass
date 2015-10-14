@@ -33,7 +33,7 @@ private:
 
     void bruteSequential(char x, int maxLen);
     void bruteImpl(char* str, int index, int maxDepth, crypt_data localData);
-
+    long getFileSize(string name);
 
 public:
     explicit Functions();
