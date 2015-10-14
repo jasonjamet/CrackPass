@@ -8,7 +8,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 
-    /*int rank, size, tag, rc, i;
+    int rank, size, tag, rc, i;
     int code;
     MPI_Status status;
     char message[20];
@@ -31,39 +31,24 @@ int main(int argc, char *argv[]) {
     cout<<"node "<<rank<<": "<<message<< " size" << ":" << size << endl;
     code = MPI_Finalize();
 
-*/
+    if(argc >1) {
+        Functions * F = new Functions();
+        map<string, string> userAndPass = F->readShadowFile("shadow");
+        F->setPasswordEncryptedByName(userAndPass, argv[1]);
+        if(atoi(argv[2]) == 1) {
+            F->launchSimpleBruteForce(3);
+        } else {
+            F->launchDictionaryBruteForce();
+        }
 
-
-    Functions * F = new Functions();
-
-    map<string, string> userAndPass = F->readShadowFile("shadow");
-    map<int, string> numberUser;
-    cout << "Please choose a user to crack (only numbers allowed): " << endl;
-    int userNumber = 1;
-    for (map<string ,string>::iterator it=userAndPass.begin(); it!=userAndPass.end(); ++it) {
-        numberUser[userNumber] = it->first.c_str();
-        cout << "\t" << userNumber << ": " << it->first.c_str() << endl;
-        userNumber++;
-    }
-
-
-    //cin >> userNumber;
-    userNumber = 1;
-    F->setPasswordEncryptedByName(userAndPass, numberUser[userNumber]);
-    cout << "Please choose a method \n \t1: Classical brute force\n \t2: Dictionary brute force" << endl;
-    int algo;
-    cin >> algo;
-
-    if(algo == 1) {
-        F->launchSimpleBruteForce(3);
+        if (F->getFind()) {
+            cout << "Password found: " << F->getPassword() << endl;
+        } else {
+            cout << "Password not found !" << endl;
+        }
     } else {
-        F->launchDictionaryBruteForce();
-    }
-
-    if (F->getFind()) {
-        cout << "Password found: " << F->getPassword() << endl;
-    } else {
-        cout << "Password not found !" << endl;
+        cout << "arguments are missing" << endl;
+        return 1;
     }
 
     return 0;
