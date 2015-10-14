@@ -111,7 +111,7 @@ long Functions::getFileSize(string name) {
 }
 
 void Functions::launchDictionaryBruteForce() {
-    if(m_hash != NULL) {
+    /*if(m_hash != NULL) {
         string tmpHash = m_hash;
         FILE * file = fopen("database.txt", "r");
         cout << "aaaa " << tmpHash << endl;
@@ -158,7 +158,7 @@ void Functions::launchDictionaryBruteForce() {
 
     } else {
         cerr << "Error password not found" << endl;
-    }
+    }*/
 }
 
 
