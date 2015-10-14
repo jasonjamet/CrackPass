@@ -18,13 +18,17 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    QString getUserName();
+     QString getUserName();
 
 public slots:
     void SlotTick();
     void tick();
     void SlotStop();
     void on_ConfirmButton_clicked();
+    void setListData(QString data);
+
+signals:
+    void SignalStopLoad();
 
 private:
     Ui::MainWindow *ui;
@@ -32,6 +36,7 @@ private:
 
     QTimer *timer;
     int secondes;
+
     Functions * m_F;
 
 

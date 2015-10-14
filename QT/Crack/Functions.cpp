@@ -185,3 +185,9 @@ char * Functions::getPassword() const {
 bool Functions::getFind() const {
     return m_find;
 }
+
+void Functions::initialize()
+{
+    m_hash = NULL;
+    m_find = false;
+}

@@ -32,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->textPassword->setEnabled(false);
 
+    this->setListData("LOLOL");
+    this->setListData("XD");
 
     map<string, string> userAndPass = m_F->readShadowFile("shadow");
     for (map<string ,string>::iterator it=userAndPass.begin(); it!=userAndPass.end(); ++it) {
@@ -39,11 +41,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     }
 
-
-   // QObject::connect(ui->ConfirmButton, SIGNAL(clicked()),this, SLOT(SlotTick()));
     QObject::connect(ui->StopButton, SIGNAL(clicked()),this, SLOT(SlotStop()));
-
-    //F->lauchSimpleBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"), 4);
+    QObject::connect(this, SIGNAL(SignalStopLoad()), this, SLOT(SlotStop()));
 
 
 }
@@ -56,6 +55,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_ConfirmButton_clicked()
 {
+
     ui->label->setText("Hello <b>" +getUserName()+ "</b>, you just make crack password.");
     ui->label->setEnabled(false);
     ui->comboBox->setEnabled(false);
@@ -65,10 +65,62 @@ void MainWindow::on_ConfirmButton_clicked()
     ui->radioOpenMP->setEnabled(false);
     ui->textPassword->setText("Searching password ...");
 
+
+    clock_t init;
+    init=clock();
+
     time_t start = time(NULL);
 
     m_F->getPasswordEncryptedByName(m_F->readShadowFile("shadow"), getUserName().toLatin1().data());
-    m_F->launchDictionaryBruteForce();
+
+    if(ui->checkDico->isChecked() && !ui->checkBrute->isChecked())
+    {
+        cout << "CheckDico checked && checkBrute not checked" << endl;
+        if(ui->radioOMPI->isChecked())
+        {
+            cout << "Open / MPI Checked" << endl;
+        }
+
+        if(ui->radioMPI->isChecked())
+        {
+            cout << "MPI Checked" << endl;
+        }
+
+        if(ui->radioOpenMP->isChecked())
+        {
+            cout << "Openmp Checked" << endl;
+            m_F->launchDictionaryBruteForce();
+        }
+    }
+    else if(ui->checkBrute->isChecked() && !ui->checkDico->isChecked())
+    {
+        cout << "CheckBrute checked && checkDico not checked" << endl;
+        if(ui->radioOMPI->isChecked())
+        {
+            cout << "Open / MPI Checked" << endl;
+        }
+
+        if(ui->radioMPI->isChecked())
+        {
+            cout << "MPI Checked" << endl;
+        }
+
+        if(ui->radioOpenMP->isChecked())
+        {
+            cout << "Openmp Checked" << endl;
+            m_F->launchSimpleBruteForce();
+        }
+    }
+    else if(ui->checkBrute->isChecked() && ui->checkDico->isChecked())
+    {
+        cout << "CheckBrute checked && checkDico checked" << endl;
+    }
+    else
+    {
+        m_F->launchDictionaryBruteForce();
+    }
+
+
     time_t end = time(NULL);
 
     if (m_F->getFind() == true)
@@ -77,7 +129,12 @@ void MainWindow::on_ConfirmButton_clicked()
         cout << "Mot de passe trouvé :" << m_F->getPassword() << endl;
 
         ui->textPassword->setText(m_F->getPassword());
+
+        emit SignalStopLoad();
     }
+
+    setListData("OK2 "+getUserName());
+
 
 
 
@@ -113,13 +170,22 @@ void MainWindow::SlotTick()
 
 void MainWindow::SlotStop()
 {
-    //this->timer->stop();
     ui->comboBox->setEnabled(true);
     ui->ConfirmButton->setEnabled(true);
     ui->radioMPI->setEnabled(true);
     ui->radioOMPI->setEnabled(true);
     ui->radioOpenMP->setEnabled(true);
 
+    cout << "Stop password " << m_F->getPassword() << endl;
+    cout << "Stop find" << m_F->getFind()<< endl;
 
-   // delete timer;
+    m_F->initialize();
+
+    cout << "Initialize password " << m_F->getPassword() << endl;
+    cout << "Initialize find" << m_F->getFind()<< endl;
+}
+
+void MainWindow::setListData(QString data)
+{
+   ui->textBrowser->append(data);
 }

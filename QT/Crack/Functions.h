@@ -22,7 +22,7 @@ struct crypt_data;
 
 class Functions {
 
-private:
+public:
     const char *m_hash;
     char * m_password;
     bool m_find;
@@ -48,8 +48,7 @@ public:
 
     char * getPassword() const;
     bool getFind() const;
-
-
+    void initialize();
 };
 
 #endif //CRACKPASS_FUNCTIONS_H
