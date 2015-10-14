@@ -2,13 +2,13 @@
 // Created by etudiant on 06/10/15.
 //
 
-//#include "QT/Crack/Functions.h"
+#include "QT/Crack/Functions.h"
 #include <mpi.h>
 using namespace std;
 
 int main(int argc, char *argv[]) {
 
-    int rank, size, tag, rc, i;
+    /*int rank, size, tag, rc, i;
     int code;
     MPI_Status status;
     char message[20];
@@ -31,16 +31,41 @@ int main(int argc, char *argv[]) {
     cout<<"node "<<rank<<": "<<message<< " size" << ":" << size << endl;
     code = MPI_Finalize();
 
+*/
 
 
-    /*Functions *F = new Functions();
-    //F->lauchSimpleBruteForce(F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason"), 4);
-    F->getPasswordEncryptedByName(F->readShadowFile("shadow"), "jason");
-    //F->launchDictionaryBruteForce();
-    F->launchSimpleBruteForce(4);
-    delete (F);*/
+    Functions * F = new Functions();
 
-    //launchParallelBF(3);
+    map<string, string> userAndPass = F->readShadowFile("shadow");
+    map<int, string> numberUser;
+    cout << "Please choose a user to crack (only numbers allowed): " << endl;
+    int userNumber = 1;
+    for (map<string ,string>::iterator it=userAndPass.begin(); it!=userAndPass.end(); ++it) {
+        numberUser[userNumber] = it->first.c_str();
+        cout << "\t" << userNumber << ": " << it->first.c_str() << endl;
+        userNumber++;
+    }
+
+
+    //cin >> userNumber;
+    userNumber = 1;
+    F->setPasswordEncryptedByName(userAndPass, numberUser[userNumber]);
+    cout << "Please choose a method \n \t1: Classical brute force\n \t2: Dictionary brute force" << endl;
+    int algo;
+    cin >> algo;
+
+    if(algo == 1) {
+        F->launchSimpleBruteForce(3);
+    } else {
+        F->launchDictionaryBruteForce();
+    }
+
+    if (F->getFind()) {
+        cout << "Password found: " << F->getPassword() << endl;
+    } else {
+        cout << "Password not found !" << endl;
+    }
+
     return 0;
 }
 

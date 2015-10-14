@@ -1,15 +1,17 @@
 #include "Functions.h"
 #include <omp.h>
-Functions::Functions(): m_hash(NULL), m_password(NULL), m_find(false) {
+#include <vector>
+
+Functions::Functions(): m_hash(""), m_password(""), m_find(false) {
 
 }
 
 Functions::~Functions() {
 }
 
-map<string, string> Functions::readShadowFile(string shadowFileName) {
-    map<string, string> userAndPass;
+map<string, string> Functions::readShadowFile(string shadowFileName) const {
 
+    map<string, string> userAndPass;
     ifstream shadowFileStream;
     shadowFileStream.open(shadowFileName);
     if (shadowFileStream.is_open()) {
@@ -36,38 +38,41 @@ map<string, string> Functions::readShadowFile(string shadowFileName) {
     return userAndPass;
 }
 
-const char *Functions::getPasswordEncryptedByName(map<string, string> userAndPass, string userName) {
+void Functions::setPasswordEncryptedByName(map<string, string> userAndPass, string userName) {
     if (!userAndPass.empty() && userAndPass.count(userName) == 1) {
-        m_hash = userAndPass[userName].c_str();
-        return m_hash;
+        m_hash = userAndPass[userName];
     } else {
         cerr << "Error name not found, or multiple name" << endl;
-        return NULL;
     }
 }
 
 
-void Functions::bruteImpl(char* str, int index, int maxDepth, crypt_data localData) {
+void Functions::bruteImpl(char* str, int index, int maxDepth, crypt_data & localData) {
+
     for (int i = 0; i < characters_size; ++i) {
-        localData.initialized = 0;
+        if(!m_find) {
+            localData.initialized = 0;
 
-        str[index] = characters[i];
-        if (index == maxDepth - 1) {
-           if (encryptAndCompare(str, localData)) {
-                m_find = true;
-                cout << "TROUVE: " << str << endl;
-                m_password = (char *) malloc(strlen(str));
-                strcpy(m_password, str);
-                i = characters_size;
+            str[index] = characters[i];
+            if (index == maxDepth - 1) {
+                cout << str << endl;
+                if (encryptAndCompare(str, localData)) {
+                    m_find = true;
+                    m_password = str;
+                    i = characters_size;
+                }
             }
+            else {
+                bruteImpl(str, index + 1, maxDepth, localData);
+            }
+        } else {
+           i =  characters_size;
         }
-        else {
-            bruteImpl(str, index + 1, maxDepth, localData);
-        }
+
     }
 }
 
-void Functions::bruteSequential(char x, int maxLen) {
+void Functions::bruteSequential(char x, int maxLen)  {
     crypt_data localData;
     char* buf = (char *) malloc(maxLen + 1);
 
@@ -96,89 +101,49 @@ void Functions::launchSimpleBruteForce(int max) {
     }
 }
 
-
-long Functions::getFileSize(string name) {
-    ifstream fichier (name);
-    int count = 0;
-    string line;
-
-    while ( !fichier.eof() ) {
-        fichier >> line;
-        ++count;
-    }
-    fichier.close();
-    return count;
-}
-
 void Functions::launchDictionaryBruteForce() {
-    /*if(m_hash != NULL) {
-        string tmpHash = m_hash;
-        FILE * file = fopen("database.txt", "r");
-        cout << "aaaa " << tmpHash << endl;
+    if(m_hash != "") {
+        vector<string> v;
+        ifstream fichier("database.txt");
 
-        long numberOfLines =  getFileSize("database.txt");
-        cout << "aaaa " << tmpHash << endl;
-
-        int lineSize = 100;
+        if (fichier) {
+            string ligne;
+            while(getline(fichier, ligne)) {
+                v.push_back(ligne);
+            }
+            fichier.close();
+        }
 
         crypt_data localData;
-        char * databaseArray = (char *)  malloc(sizeof(char) * lineSize * numberOfLines);
 
-        long noOfLines = 0;
-        if (file != NULL) {
-            char * currentLine = (char *) malloc(lineSize);
-            int i  = 0;
-            while (fgets (currentLine, lineSize, file) != NULL) {
-                strcpy(&databaseArray[i*lineSize], currentLine) ;
-                i++;
-            }
-        } else {
-            cout << "ERROR" << endl;
-        }
-        fclose(file);
-        cout << "bbb" << databaseArray << endl;
-
-        //#pragma omp parallel for private(localData)
-        for (int i = 0; i < numberOfLines; i++) {
-            cout << "ccc" << m_hash << endl;
-
+        #pragma omp parallel for private(localData)
+        for (unsigned int i = 0; i < v.size(); i++) {
             if(!m_find) {
                 localData.initialized = 0;
-                if (encryptAndCompareDictionary(databaseArray[i], localData)) {
-                    cout << "trouve" << databaseArray[i] <<  endl;
-                    m_password = (char *) malloc(lineSize);
-                    strcpy(m_password, databaseArray[i]);
-                    i = numberOfLines;
+                if (encryptAndCompareDictionary(v[i], localData)) {
+                    m_password = v[i];
                     m_find = true;
+                    i = v.size();
                 }
             } else {
-                i = taille;
+                i = v.size();
             }
         }
-
     } else {
-        cerr << "Error password not found" << endl;
-    }*/
+        cerr << "Error Hash not found" << endl;
+    }
 }
 
 
-bool Functions::encryptAndCompareDictionary(string passwordCandidate, crypt_data localData) const{
-    /*if(passwordCandidate.c_str()[passwordCandidate.size()-1] == '\n') {
-        passwordCandidate.erase(passwordCandidate.size()-1);
-        cout << passwordCandidate << endl;
-        return strcmp(crypt_r(passwordCandidate.c_str(), m_hash, &localData), m_hash) == 0;
-    } else {*/
-        //cout << crypt_r(passwordCandidate.c_str(), m_hash, &localData)  << endl;
-
-        return strcmp(crypt_r(passwordCandidate.c_str(), m_hash, &localData), m_hash) == 0;
-    //}
+bool Functions::encryptAndCompareDictionary(string passwordCandidate, crypt_data & localData) const {
+    return strcmp(crypt_r(passwordCandidate.c_str(), m_hash.c_str(), &localData), m_hash.c_str()) == 0;
 }
 
-bool Functions::encryptAndCompare(char * passwordCandidate, crypt_data localData) const{
-    return strcmp(crypt_r(passwordCandidate, m_hash, &localData), m_hash) == 0;
+bool Functions::encryptAndCompare(string passwordCandidate, crypt_data & localData) const{
+    return strcmp(crypt_r(passwordCandidate.c_str(), m_hash.c_str(), &localData), m_hash.c_str()) == 0;
 }
 
-char * Functions::getPassword() const {
+string Functions::getPassword() const {
     return m_password;
 }
 
@@ -188,6 +153,7 @@ bool Functions::getFind() const {
 
 void Functions::initialize()
 {
-    m_hash = NULL;
+    m_hash = "";
     m_find = false;
+    m_password = "";
 }
