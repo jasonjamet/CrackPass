@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <sstream>
 #include <map>
+#include <mpi.h>
 
 using namespace std;
 

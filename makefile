@@ -4,7 +4,7 @@ all:
 	#cd QT/build-Crack-Desktop-Debug/ && $(MAKE)
 	#QT/build-Crack-Desktop-Debug/Crack
 	mpic++ -o Prog main.cpp Functions.cpp Functions.h -std=c++11 -Wall -lcrypt -fopenmp
-	mpirun  Prog jason 1
+	mpirun -np 3 Prog jason 0
 
 
 clean:
