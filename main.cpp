@@ -8,7 +8,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 
-    int rank, size, tag, rc, i;
+    /*int rank, size, tag, rc, i;
     int code;
     MPI_Status status;
     char message[20];
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
     else
         code = MPI_Recv(message, 13, MPI_CHAR, 0, tag, MPI_COMM_WORLD, &status);
     cout<<"node "<<rank<<": "<<message<< " size" << ":" << size << endl;
-    code = MPI_Finalize();
+    code = MPI_Finalize();*/
 
     if(argc >1) {
         Functions * F = new Functions();
