@@ -40,17 +40,13 @@ int main(int argc, char *argv[]) {
 
     std::string ligne;
 
-    std::vector<string> v(taille);
+    std::vector<string> v(1000000);
 
     if (fichier)
     {
         int i = 0;
         while (std::getline(fichier, ligne)) {
             v.push_back(ligne);
-
-            i++;
-            if (i == 5)
-                break;
         }
     } else {
         cout << "ERROR" << endl;
