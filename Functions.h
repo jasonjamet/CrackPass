@@ -9,6 +9,9 @@
 #include <sstream>
 #include <map>
 #include <mpi.h>
+#include <omp.h>
+#include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -25,7 +28,6 @@ class Functions {
 
 public:
     string m_hash;
-    string m_password;
     bool m_find;
 
     void checkForce(string str, int index, int max, const crypt_data & localData);
@@ -46,10 +48,7 @@ public:
     void launchDictionaryBruteForce();
     void launchSimpleBruteForce(int max = 5);
 
-
-    string getPassword() const;
     bool getFind() const;
-    void initialize();
 };
 
 #endif //CRACKPASS_FUNCTIONS_H
