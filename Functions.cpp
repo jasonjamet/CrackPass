@@ -1,8 +1,6 @@
 #include "Functions.h"
-#include <omp.h>
-#include <vector>
 
-Functions::Functions(): m_hash(""), m_password(""), m_find(false) {
+Functions::Functions(): m_hash(""), m_find(false) {
 
 }
 
@@ -46,7 +44,6 @@ void Functions::setPasswordEncryptedByName(map<string, string> userAndPass, stri
     }
 }
 
-
 void Functions::bruteImpl(char* str, int index, int maxDepth, crypt_data & localData) {
 
     for (int i = 0; i < characters_size; ++i) {
@@ -57,8 +54,9 @@ void Functions::bruteImpl(char* str, int index, int maxDepth, crypt_data & local
             if (index == maxDepth - 1) {
                 if (encryptAndCompare(str, localData)) {
                     m_find = true;
-                    m_password = str;
                     i = characters_size;
+                    MPI_Send(str, strlen(str), MPI_CHAR, 0, 7, MPI_COMM_WORLD);
+                    MPI_Abort(MPI_COMM_WORLD,MPI_SUCCESS, ierr);
                 }
             }
             else {
@@ -76,7 +74,7 @@ void Functions::bruteSequential(char x, int maxLen)  {
     char* buf = (char *) malloc(maxLen + 1);
 
     buf[0] = x;
-#pragma omp parallel for private(localData)
+    #pragma omp parallel for private(localData)
     for (int i = 2; i <= maxLen; ++i) {
         if (!m_find) {
             buf[i]='\0';
@@ -90,12 +88,30 @@ void Functions::bruteSequential(char x, int maxLen)  {
 }
 
 void Functions::launchSimpleBruteForce(int max) {
-#pragma omp parallel for
-    for (int k = 0; k < characters_size; k++) {
-        if (!m_find) {
-            bruteSequential(characters[k], max);
-        } else {
-            k = characters_size;
+
+    int size, rank;
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    int groupSize = floor(characters_size / size-2);
+
+    #pragma omp parallel for
+    for (int i = (rank -1) * groupSize; i < rank * groupSize; i++) {
+            if (!m_find) {
+                bruteSequential(characters[i], max);
+            } else {
+                i = characters_size;
+            }
+    }
+
+    if (rank == size - 1) {
+        #pragma omp parallel for
+        for (int i = (rank -1) * groupSize; i < characters_size; i++) {
+            if (!m_find) {
+                bruteSequential(characters[i], max);
+            } else {
+                i = characters_size;
+            }
         }
     }
 }
@@ -129,16 +145,15 @@ void Functions::launchDictionaryBruteForce() {
 
         crypt_data localData;
 
-#pragma omp parallel for private(localData)
+        #pragma omp parallel for private(localData)
         for (unsigned int i = 0; i < v.size(); i++) {
             if(!m_find) {
                 localData.initialized = 0;
                 if (encryptAndCompareDictionary(v[i], localData)) {
-                    m_password = v[i];
                     m_find = true;
                     i = v.size();
-                    char * tmp =(char *) m_password.c_str();
-                    MPI_Send(tmp, m_password.size(), MPI_CHAR, 0, 7, MPI_COMM_WORLD);
+                    char * tmp =(char *) v[i].c_str();
+                    MPI_Send(tmp, v[i].size(), MPI_CHAR, 0, 7, MPI_COMM_WORLD);
                 }
             } else {
                 i = v.size();
@@ -158,17 +173,7 @@ bool Functions::encryptAndCompare(string passwordCandidate, crypt_data & localDa
     return strcmp(crypt_r(passwordCandidate.c_str(), m_hash.c_str(), &localData), m_hash.c_str()) == 0;
 }
 
-string Functions::getPassword() const {
-    return m_password;
-}
-
 bool Functions::getFind() const {
     return m_find;
 }
 
-void Functions::initialize()
-{
-    m_hash = "";
-    m_find = false;
-    m_password = "";
-}

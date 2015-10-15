@@ -142,17 +142,6 @@ bool Functions::encryptAndCompare(string passwordCandidate, crypt_data & localDa
     return strcmp(crypt_r(passwordCandidate.c_str(), m_hash.c_str(), &localData), m_hash.c_str()) == 0;
 }
 
-string Functions::getPassword() const {
-    return m_password;
-}
-
 bool Functions::getFind() const {
     return m_find;
-}
-
-void Functions::initialize()
-{
-    m_hash = "";
-    m_find = false;
-    m_password = "";
 }

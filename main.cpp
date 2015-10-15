@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
         }
         else {
             if(atoi(argv[2]) == 1) {
-                F->launchSimpleBruteForce(3);
+                F->launchSimpleBruteForce();
             } else {
                 F->launchDictionaryBruteForce();
             }
