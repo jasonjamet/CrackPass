@@ -103,10 +103,21 @@ void Functions::launchSimpleBruteForce(int max) {
 void Functions::launchDictionaryBruteForce() {
     if(m_hash != "") {
         vector<string> v;
-        /*int rank;
+        int rank;
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-        cout << rank << endl;*/
-        ifstream fichier("database.txt");
+        cout << rank << endl;
+        ifstream fichier;
+        switch (rank) {
+            case 1:
+                cout << "Read first file" << endl;
+                fichier.open("database.txt");
+                break;
+            case 2:
+                cout << "Read second file" << endl;
+                fichier.open("database2.txt");
+                break;
+
+        }
 
         if (fichier) {
             string ligne;
@@ -126,6 +137,8 @@ void Functions::launchDictionaryBruteForce() {
                     m_password = v[i];
                     m_find = true;
                     i = v.size();
+                    char * tmp =(char *) m_password.c_str();
+                    MPI_Send(tmp, m_password.size(), MPI_CHAR, 0, 7, MPI_COMM_WORLD);
                 }
             } else {
                 i = v.size();
