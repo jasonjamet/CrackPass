@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
         if (rank==0) {
             MPI_Recv(message, 100, MPI_CHAR, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             cout << "Password found: " << message << endl;
+            MPI_Abort(MPI_COMM_WORLD, 0)
 
         }
         else {
