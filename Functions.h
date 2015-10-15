@@ -49,6 +49,8 @@ public:
     void launchSimpleBruteForce(int max = 5);
 
     bool getFind() const;
+    string getHash() const;
+    void setHash(const char * hash);
 };
 
 #endif //CRACKPASS_FUNCTIONS_H

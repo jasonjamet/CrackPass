@@ -56,7 +56,6 @@ void Functions::bruteImpl(char* str, int index, int maxDepth, crypt_data & local
                     m_find = true;
                     i = characters_size;
                     MPI_Send(str, strlen(str), MPI_CHAR, 0, 7, MPI_COMM_WORLD);
-                    MPI_Abort(MPI_COMM_WORLD,MPI_SUCCESS, ierr);
                 }
             }
             else {
@@ -150,10 +149,11 @@ void Functions::launchDictionaryBruteForce() {
             if(!m_find) {
                 localData.initialized = 0;
                 if (encryptAndCompareDictionary(v[i], localData)) {
+                    string tmp = v[i];
                     m_find = true;
                     i = v.size();
-                    char * tmp =(char *) v[i].c_str();
-                    MPI_Send(tmp, v[i].size(), MPI_CHAR, 0, 7, MPI_COMM_WORLD);
+                    cout << tmp << endl;
+                    MPI_Send((char*)tmp.c_str(), tmp.size(), MPI_CHAR, 0, 7, MPI_COMM_WORLD);
                 }
             } else {
                 i = v.size();
@@ -175,5 +175,13 @@ bool Functions::encryptAndCompare(string passwordCandidate, crypt_data & localDa
 
 bool Functions::getFind() const {
     return m_find;
+}
+
+string Functions::getHash() const {
+    return m_hash;
+}
+
+void Functions::setHash(const char * hash) {
+    m_hash = hash;
 }
 
