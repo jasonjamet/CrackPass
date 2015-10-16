@@ -51,6 +51,7 @@ void Functions::bruteImpl(char* str, int index, int maxDepth, crypt_data & local
             localData.initialized = 0;
 
             str[index] = characters[i];
+            cout << str << endl;
             if (index == maxDepth - 1) {
                 if (encryptAndCompare(str, localData)) {
                     m_find = true;
