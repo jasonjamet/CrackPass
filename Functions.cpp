@@ -55,7 +55,7 @@ void Functions::bruteImpl(char* str, int index, int maxDepth, crypt_data & local
                 if (encryptAndCompare(str, localData)) {
                     m_find = true;
                     i = characters_size;
-                    MPI_Send(str, strlen(str), MPI_CHAR, 0, 7, MPI_COMM_WORLD);
+                    MPI_Send(str, 100, MPI_CHAR, 0, 7, MPI_COMM_WORLD);
                 }
             }
             else {

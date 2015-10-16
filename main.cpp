@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 
             MPI_Recv(message, 100, MPI_CHAR, MPI_ANY_SOURCE, 7, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             cout << "Password found: " << message << endl;
-            //MPI_Abort(MPI_COMM_WORLD, MPI_SUCCESS);
+            MPI_Abort(MPI_COMM_WORLD, MPI_SUCCESS);
 
         }
         else {
