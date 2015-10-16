@@ -16,7 +16,6 @@
 using namespace std;
 
 static const char characters[] = "abcdefghijklmnopqrstuvwxyz"
-"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 "0123456789";
 //"&é~\"#'{([|-`è_\\^ç@à])}=+$¤£ù%*µ!§:/;.,?<>² ";
 
