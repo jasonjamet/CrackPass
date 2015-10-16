@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
             F->setHash(message);
             if(strcmp(argv[2], "BF") == 0) {
                 F->launchSimpleBruteForce();
-            } else  if(strcmp(argv[2], "BF") == 0) {
+            } else  if(strcmp(argv[2], "D") == 0) {
                 F->launchDictionaryBruteForce();
             } else {
                 MPI_Abort(MPI_COMM_WORLD, 1);
