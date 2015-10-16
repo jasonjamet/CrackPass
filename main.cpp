@@ -3,10 +3,12 @@
 //
 
 #include "Functions.h"
+#include "cpu_timer.h"
 using namespace std;
 
 int main(int argc, char *argv[]) {
 
+    CPUTimer c_timer;
 
     if(argc >1) {
         Functions * F = new Functions();
@@ -21,23 +23,26 @@ int main(int argc, char *argv[]) {
             map<string, string> userAndPass = F->readShadowFile("shadow");
             F->setPasswordEncryptedByName(userAndPass, argv[1]);
             strcpy(message, F->getHash().c_str());
+            c_timer.start();
         }
         MPI_Bcast(message, 100, MPI_CHAR, 0, MPI_COMM_WORLD);
 
         if (rank==0) {
             MPI_Recv(message, 100, MPI_CHAR, MPI_ANY_SOURCE, 7, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             cout << "Password found: " << message << endl;
+            c_timer.stop();
+            cout << "Finished in: " << c_timer << " ms" << endl;
             MPI_Abort(MPI_COMM_WORLD, MPI_SUCCESS);
-
         }
         else {
 
             F->setHash(message);
-
-            if(atoi(argv[2]) == 1) {
+            if(strcmp(argv[2], "BF") == 0) {
                 F->launchSimpleBruteForce();
-            } else {
+            } else  if(strcmp(argv[2], "BF") == 0) {
                 F->launchDictionaryBruteForce();
+            } else {
+                MPI_Abort(MPI_COMM_WORLD, 1);
             }
         }
 

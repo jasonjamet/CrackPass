@@ -118,20 +118,10 @@ void Functions::launchSimpleBruteForce(int max) {
 void Functions::launchDictionaryBruteForce() {
     if(m_hash != "") {
         vector<string> v;
-        int rank;
+        int size, rank;
+        MPI_Comm_size(MPI_COMM_WORLD, &size);
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-        cout << rank << endl;
-        ifstream fichier;
-        switch (rank) {
-            case 1:
-                fichier.open("database.txt");
-                break;
-            case 2:
-                cout << "Read second file" << endl;
-                fichier.open("database2.txt");
-                break;
-
-        }
+        ifstream fichier("database.txt");
 
         if (fichier) {
             string ligne;
@@ -143,18 +133,36 @@ void Functions::launchDictionaryBruteForce() {
 
         crypt_data localData;
 
+        int groupSize = floor(v.size()/ size-2);
         #pragma omp parallel for private(localData)
-        for (unsigned int i = 0; i < v.size(); i++) {
-            if(!m_find) {
+        for (int i = (rank -1) * groupSize; i < rank * groupSize; i++) {
+            if (!m_find) {
                 localData.initialized = 0;
                 if (encryptAndCompareDictionary(v[i], localData)) {
                     string tmp = v[i];
                     m_find = true;
                     i = v.size();
-                    MPI_Send((char*)tmp.c_str(), tmp.size(), MPI_CHAR, 0, 7, MPI_COMM_WORLD);
+                    MPI_Send((char*)tmp.c_str(), 100, MPI_CHAR, 0, 7, MPI_COMM_WORLD);
                 }
             } else {
                 i = v.size();
+            }
+        }
+
+        if (rank == size - 1) {
+            #pragma omp parallel for
+            for (unsigned int i = (rank -1) * groupSize; i < v.size(); i++) {
+                if (!m_find) {
+                    localData.initialized = 0;
+                    if (encryptAndCompareDictionary(v[i], localData)) {
+                        string tmp = v[i];
+                        m_find = true;
+                        i = v.size();
+                        MPI_Send((char*)tmp.c_str(), 100, MPI_CHAR, 0, 7, MPI_COMM_WORLD);
+                    }
+                } else {
+                    i = v.size();
+                }
             }
         }
     } else {
