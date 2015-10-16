@@ -56,7 +56,6 @@ void Functions::bruteImpl(char* str, int index, int maxDepth, crypt_data & local
                     m_find = true;
                     i = characters_size;
                     MPI_Send(str, strlen(str), MPI_CHAR, 0, 7, MPI_COMM_WORLD);
-                    MPI_Abort(MPI_COMM_WORLD,MPI_SUCCESS, ierr);
                 }
             }
             else {
