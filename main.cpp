@@ -2,32 +2,42 @@
 // Created by etudiant on 06/10/15.
 //
 
-#include "QT/Crack/Functions.h"
+#include "Functions.h"
 using namespace std;
 
 int main(int argc, char *argv[]) {
 
     if(argc >1) {
         Functions * F = new Functions();
-        map<string, string> userAndPass = F->readShadowFile("shadow");
-        F->setPasswordEncryptedByName(userAndPass, argv[1]);
 
 
-        int rank, size;
-        int tag = 7;
-        MPI_Status status;
-        char message[20];
+
+        int rank;
         MPI_Init(&argc, &argv);
-        MPI_Comm_size(MPI_COMM_WORLD, &size);
 
         MPI_Comm_rank(MPI_COMM_WORLD, &rank); // Rank
+        char * message = (char *) malloc(100);
+
+        if(rank == 0) {
+            map<string, string> userAndPass = F->readShadowFile("shadow");
+            F->setPasswordEncryptedByName(userAndPass, argv[1]);
+            strcpy(message, F->getHash().c_str());
+        }
+        MPI_Bcast(message, 100, MPI_CHAR, 0, MPI_COMM_WORLD);
 
         if (rank==0) {
-            MPI_Recv(message, 100, MPI_CHAR, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+            //MPI_Send(message, 100, MPI_CHAR, MPI_, 7, MPI_COMM_WORLD);
+
+            MPI_Recv(message, 100, MPI_CHAR, MPI_ANY_SOURCE, 7, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             cout << "Password found: " << message << endl;
+            MPI_Abort(MPI_COMM_WORLD, MPI_SUCCESS);
 
         }
         else {
+
+            F->setHash(message);
+            cout << F->getHash() << endl;
             if(atoi(argv[2]) == 1) {
                 F->launchSimpleBruteForce();
             } else {
