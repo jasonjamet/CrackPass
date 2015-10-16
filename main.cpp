@@ -7,10 +7,9 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 
+
     if(argc >1) {
         Functions * F = new Functions();
-
-
 
         int rank;
         MPI_Init(&argc, &argv);
@@ -26,9 +25,6 @@ int main(int argc, char *argv[]) {
         MPI_Bcast(message, 100, MPI_CHAR, 0, MPI_COMM_WORLD);
 
         if (rank==0) {
-
-            //MPI_Send(message, 100, MPI_CHAR, MPI_, 7, MPI_COMM_WORLD);
-
             MPI_Recv(message, 100, MPI_CHAR, MPI_ANY_SOURCE, 7, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             cout << "Password found: " << message << endl;
             MPI_Abort(MPI_COMM_WORLD, MPI_SUCCESS);
@@ -37,7 +33,7 @@ int main(int argc, char *argv[]) {
         else {
 
             F->setHash(message);
-            cout << F->getHash() << endl;
+
             if(atoi(argv[2]) == 1) {
                 F->launchSimpleBruteForce();
             } else {

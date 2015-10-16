@@ -55,8 +55,7 @@ void Functions::bruteImpl(char* str, int index, int maxDepth, crypt_data & local
                 if (encryptAndCompare(str, localData)) {
                     m_find = true;
                     i = characters_size;
-                    MPI_Send(str, strlen(str), MPI_CHAR, 0, 7, MPI_COMM_WORLD);
-                    MPI_Abort(MPI_COMM_WORLD,MPI_SUCCESS, ierr);
+                    MPI_Send(str, 100, MPI_CHAR, 0, 7, MPI_COMM_WORLD);
                 }
             }
             else {
@@ -125,7 +124,6 @@ void Functions::launchDictionaryBruteForce() {
         ifstream fichier;
         switch (rank) {
             case 1:
-                cout << "Read first file" << endl;
                 fichier.open("database.txt");
                 break;
             case 2:
