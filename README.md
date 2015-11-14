@@ -6,11 +6,8 @@ A "C" program optimized (OpenMP, MPI) to bruteforce a password.
 Usage : mpirun -np "number of core to use" Crackpass "parallelization method" "user name" "bruteForce method"
 ```
 number of core to use : integer 1 to X
-
 parallelization method : openMP or MPI
-
 user name: name of the user (need to be in the shadow file)
-
 bruteForce method: 0 for dictionary, 1 for classical method
 
 
